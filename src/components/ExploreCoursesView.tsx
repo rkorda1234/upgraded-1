@@ -4,6 +4,7 @@ import {
   COURSES, 
   Course 
 } from "../data/courses";
+import GHLWaitingListModal from "./GHLWaitingListModal";
 import { 
   BookOpen, 
   CheckCircle2, 
@@ -70,7 +71,7 @@ export default function ExploreCoursesView({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [selectedCourse]);
 
-  const categories = ["All", "Continuing Education", "Licensing Education", "Brokers", "Professional Development"];
+  const categories = ["All", "Continuing Education", "Licensing Education", "Professional Development"];
 
   const filteredCourses = COURSES.filter(course => {
     const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
@@ -875,76 +876,11 @@ export default function ExploreCoursesView({
       </div>
 
       {/* NOTIFY WAITING LIST MODAL */}
-      <AnimatePresence>
-        {notifyModalCourse && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
-            onClick={() => setNotifyModalCourse(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-left space-y-5"
-            >
-              <div className="space-y-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full inline-block">
-                  Priority Access List
-                </span>
-                <h3 className="text-xl font-bold text-black font-display">
-                  Get Notified When Enrollment Opens
-                </h3>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Enter your email below to receive an early-access invite for <strong className="text-black">{notifyModalCourse.title}</strong> before public launch.
-                </p>
-              </div>
-
-              {notifySubmitted ? (
-                <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center space-y-1">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto" />
-                  <p className="text-xs font-bold text-emerald-900">You're on the priority list!</p>
-                  <p className="text-[11px] text-emerald-700">We'll email you as soon as this course is ready for checkout.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleNotifySubmit} className="space-y-3">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-mono font-bold uppercase text-gray-500 block">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="e.g. agent@realty.com"
-                      value={notifyEmail}
-                      onChange={(e) => setNotifyEmail(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setNotifyModalCourse(null)}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl text-xs transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex-1 bg-black hover:bg-neutral-900 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-sm cursor-pointer"
-                    >
-                      Notify Me
-                    </button>
-                  </div>
-                </form>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <GHLWaitingListModal 
+        isOpen={!!notifyModalCourse} 
+        onClose={() => setNotifyModalCourse(null)} 
+        courseTitle={notifyModalCourse?.title} 
+      />
 
     </div>
   );

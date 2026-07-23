@@ -32,10 +32,11 @@ import ContactView from "./components/ContactView";
 import PolicyView, { PolicyKey } from "./components/PolicyView";
 import ExploreCoursesView from "./components/ExploreCoursesView";
 import ThankYouView from "./components/ThankYouView";
+import WaitingListThankYouView from "./components/WaitingListThankYouView";
 import heroVisual from "./assets/images/upgraded_hero_visual_1784582864331.jpg";
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you' | 'waiting_list_thank_you'>('home');
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showFloatingChat, setShowFloatingChat] = useState(false);
@@ -97,7 +98,7 @@ export default function App() {
   }, []);
 
   const navigateToView = (
-    view: 'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you',
+    view: 'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you' | 'waiting_list_thank_you',
     opts?: { courseId?: string | null; category?: string | null; policyKey?: PolicyKey }
   ) => {
     setActiveView(view);
@@ -117,7 +118,8 @@ export default function App() {
     if (view === 'home') {
       url.search = '';
     } else {
-      url.searchParams.set('view', view);
+      const viewParam = view === 'waiting_list_thank_you' ? 'waiting-list-thank-you' : view === 'thank_you' ? 'thank-you' : view;
+      url.searchParams.set('view', viewParam);
       if (view === 'courses') {
         const activeCourseId = opts ? opts.courseId : selectedCourseId;
         const activeCat = opts ? opts.category : selectedCategory;
@@ -158,8 +160,19 @@ export default function App() {
       const courseId = params.get('courseId');
       const category = params.get('category');
       const policyKey = params.get('policyKey') as PolicyKey | null;
+      const path = window.location.pathname;
 
-      if (view === 'thank-you' || view === 'thank_you' || params.has('thank-you')) {
+      if (
+        view === 'waiting-list-thank-you' || 
+        view === 'waiting_list_thank_you' || 
+        view === 'waiting-list-thankyou' ||
+        view === 'waitinglist-thankyou' ||
+        params.has('waiting-list-thank-you') ||
+        path.includes('waiting-list-thank-you') ||
+        path.includes('waiting-list-thankyou')
+      ) {
+        setActiveView('waiting_list_thank_you');
+      } else if (view === 'thank-you' || view === 'thank_you' || params.has('thank-you')) {
         setActiveView('thank_you');
       } else if (view === 'courses' || courseId) {
         setActiveView('courses');
@@ -606,6 +619,11 @@ export default function App() {
         />
       ) : activeView === 'thank_you' ? (
         <ThankYouView
+          onBackToHome={() => navigateToView('home')}
+          onExploreCourses={() => handleExploreCourses(undefined, "All")}
+        />
+      ) : activeView === 'waiting_list_thank_you' ? (
+        <WaitingListThankYouView
           onBackToHome={() => navigateToView('home')}
           onExploreCourses={() => handleExploreCourses(undefined, "All")}
         />
