@@ -156,13 +156,35 @@ export default function ExploreCoursesView({
 
                   {/* Title & Tagline */}
                   <div className="space-y-3">
+                    {selectedCourse.productCode && (
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block">
+                        {selectedCourse.productCode}
+                      </span>
+                    )}
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight font-display leading-[1.15]">
                       {selectedCourse.title}
                     </h1>
+                    {selectedCourse.heroTagline && (
+                      <p className="text-xl sm:text-2xl font-semibold text-emerald-700 font-display">
+                        {selectedCourse.heroTagline}
+                      </p>
+                    )}
                     <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-3xl font-medium">
                       {selectedCourse.headline}
                     </p>
                   </div>
+
+                  {/* Trust Bar */}
+                  {selectedCourse.trustBar && selectedCourse.trustBar.length > 0 && (
+                    <div className="p-4 bg-emerald-50/60 border border-emerald-200/60 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-emerald-950">
+                      {selectedCourse.trustBar.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Highlights Bar */}
                   <div className="pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs font-medium text-gray-600">
@@ -213,8 +235,39 @@ export default function ExploreCoursesView({
                     </p>
                   </div>
 
-                  {/* Enroll CTA Button */}
-                  {selectedCourse.isLive && selectedCourse.checkoutUrl ? (
+                  {/* Enroll CTA Button / Language Selection */}
+                  {selectedCourse.isLive && selectedCourse.languageCheckouts && selectedCourse.languageCheckouts.length > 0 ? (
+                    <div className="space-y-3">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500 block text-center">
+                        Choose Your Preferred Language
+                      </span>
+                      <p className="text-[11px] text-gray-500 text-center leading-snug">
+                        Both courses provide the same Florida state-approved curriculum and satisfy the same Continuing Education requirement.
+                      </p>
+                      <div className="grid grid-cols-1 gap-2.5 pt-1">
+                        {selectedCourse.languageCheckouts.map((lang, idx) => (
+                          <a
+                            key={idx}
+                            href={lang.checkoutUrl || selectedCourse.checkoutUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full bg-black hover:bg-neutral-900 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-between text-xs tracking-wide group cursor-pointer hover:scale-[1.01]"
+                          >
+                            <span className="flex items-center gap-2.5 whitespace-nowrap">
+                              <span className="text-base leading-none">{lang.flag}</span>
+                              <span className="font-bold text-xs uppercase tracking-wider">{lang.buttonText}</span>
+                            </span>
+                            <span className="flex items-center gap-1 shrink-0 ml-2">
+                              <ExternalLink className="w-3.5 h-3.5 text-gray-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-gray-500 text-center leading-snug pt-1">
+                        Need Help Choosing the Right Course? Request Your Upgraded Renewal Review™ below.
+                      </p>
+                    </div>
+                  ) : selectedCourse.isLive && selectedCourse.checkoutUrl ? (
                     <div className="space-y-3">
                       <a
                         href={selectedCourse.checkoutUrl}
@@ -233,13 +286,13 @@ export default function ExploreCoursesView({
                     <div className="space-y-3">
                       <button
                         onClick={() => setNotifyModalCourse(selectedCourse)}
-                        className="w-full bg-neutral-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer"
+                        className="w-full bg-black hover:bg-neutral-900 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01]"
                       >
-                        <Mail className="w-4 h-4 text-amber-400" />
-                        Join Priority Waiting List
+                        <Mail className="w-4 h-4 text-emerald-400" />
+                        <span>Notify Me When Available</span>
                       </button>
-                      <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200/60 p-2.5 rounded-lg text-center font-medium">
-                        This program is currently preparing for launch. Click above to get notified first.
+                      <p className="text-[11px] text-emerald-900 bg-emerald-50 border border-emerald-200/60 p-2.5 rounded-lg text-center font-medium">
+                        This course is currently in development. Click above to be notified as soon as enrollment opens.
                       </p>
                     </div>
                   )}
@@ -369,41 +422,224 @@ export default function ExploreCoursesView({
                   </div>
                 </div>
 
-                {/* 5. Course FAQs */}
-                {selectedCourse.faqs && selectedCourse.faqs.length > 0 && (
+                {/* Which Florida Course Do I Need Table */}
+                {selectedCourse.whichCourseTable && selectedCourse.whichCourseTable.length > 0 && (
                   <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
                     <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-black">
-                      <HelpCircle className="w-4 h-4 text-black" />
-                      <span>Questions & Answers</span>
+                      <HelpCircle className="w-4 h-4 text-emerald-600" />
+                      <span>Requirements Guide</span>
                     </div>
-                    <h2 className="text-2xl font-bold text-black font-display tracking-tight">
-                      Frequently Asked Questions
-                    </h2>
+                    <div className="space-y-2">
+                      <h2 className="text-2xl font-bold text-black font-display tracking-tight">
+                        Which Florida Course Do I Need?
+                      </h2>
+                      <p className="text-xs text-gray-500">
+                        The education you need depends on where you are in your Florida real estate licensing journey.
+                      </p>
+                    </div>
+
+                    <div className="overflow-x-auto border border-gray-150 rounded-xl">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-gray-50 border-b border-gray-150 font-mono text-[11px] uppercase text-gray-600 font-bold">
+                          <tr>
+                            <th className="p-3.5">Your Current Situation</th>
+                            <th className="p-3.5">Required Education</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 font-medium">
+                          {selectedCourse.whichCourseTable.map((row, idx) => (
+                            <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50/40"}>
+                              <td className="p-3.5 text-gray-800">{row.situation}</td>
+                              <td className="p-3.5 text-black font-bold font-mono">{row.requiredEducation}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl space-y-2 text-xs">
+                      <p className="font-bold text-emerald-950">Still unsure?</p>
+                      <p className="text-emerald-900 leading-relaxed">
+                        Our Student Success Team is happy to help you determine which education requirement most likely applies to your current licensing status before you enroll.
+                      </p>
+                      {onOpenChatWithPrompt && (
+                        <button
+                          onClick={() => onOpenChatWithPrompt("I need help determining which Florida course applies to my licensing status before enrolling.")}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-black hover:text-emerald-800 underline pt-1 cursor-pointer"
+                        >
+                          Request Your Upgraded Renewal Review™
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* The Upgraded Renewal Review */}
+                {selectedCourse.renewalReview && (
+                  <div className="bg-gradient-to-br from-neutral-900 via-black to-neutral-900 text-white rounded-2xl p-6 sm:p-10 space-y-6 shadow-xl">
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-3 py-1 rounded-full inline-block">
+                        {selectedCourse.renewalReview.title}
+                      </span>
+                      <h2 className="text-2xl font-bold font-display text-white tracking-tight">
+                        {selectedCourse.renewalReview.subtitle}
+                      </h2>
+                    </div>
+
+                    <div className="space-y-3 text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
+                      {selectedCourse.renewalReview.paragraphs.map((para, idx) => (
+                        <p key={idx}>{para}</p>
+                      ))}
+                    </div>
+
+                    {selectedCourse.renewalReview.whyCreated && (
+                      <div className="pt-4 border-t border-neutral-800 space-y-3">
+                        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                          Why We Created The Upgraded Renewal Review™
+                        </h3>
+                        <div className="space-y-2 text-xs text-gray-400 leading-relaxed">
+                          {selectedCourse.renewalReview.whyCreated.map((item, idx) => (
+                            <p key={idx}>{item}</p>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Your Renewal Journey Starts Here */}
+                {selectedCourse.renewalJourney && (
+                  <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full inline-block">
+                        Step-by-Step Experience
+                      </span>
+                      <h2 className="text-2xl font-bold text-black font-display tracking-tight">
+                        {selectedCourse.renewalJourney.title}
+                      </h2>
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        {selectedCourse.renewalJourney.subtitle}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {selectedCourse.renewalJourney.items.map((item, idx) => (
+                        <div key={idx} className="p-4 bg-gray-50 border border-gray-150 rounded-xl space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-black text-white text-[10px] font-mono font-bold flex items-center justify-center shrink-0">
+                              {idx + 1}
+                            </span>
+                            <h3 className="text-xs font-bold text-black">{item.title}</h3>
+                          </div>
+                          <p className="text-xs text-gray-600 leading-relaxed font-normal pl-7">
+                            {item.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Why Continuing Education Matters & Why Students Choose Upgraded */}
+                {(selectedCourse.whyCEMatters || selectedCourse.whyChooseUpgraded) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {selectedCourse.whyCEMatters && (
+                      <div className="bg-white border border-gray-150 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h3 className="text-base font-bold text-black font-display">
+                          Why Continuing Education Matters
+                        </h3>
+                        <div className="space-y-3 text-xs text-gray-600 leading-relaxed font-normal">
+                          {selectedCourse.whyCEMatters.map((p, idx) => (
+                            <p key={idx}>{p}</p>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedCourse.whyChooseUpgraded && (
+                      <div className="bg-white border border-gray-150 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h3 className="text-base font-bold text-black font-display">
+                          Why Students Choose Upgraded
+                        </h3>
+                        <div className="space-y-3">
+                          {selectedCourse.whyChooseUpgraded.map((item, idx) => (
+                            <div key={idx} className="space-y-1">
+                              <p className="text-xs font-bold text-black flex items-center gap-1.5">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                {item.title}
+                              </p>
+                              <p className="text-[11px] text-gray-500 pl-5 leading-snug">
+                                {item.description}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* How It Works Section */}
+                {selectedCourse.howItWorks && (
+                  <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full inline-block">
+                        Simple Process
+                      </span>
+                      <h2 className="text-2xl font-bold text-black font-display tracking-tight">
+                        {selectedCourse.howItWorks.title}
+                      </h2>
+                    </div>
 
                     <div className="space-y-3">
-                      {selectedCourse.faqs.map((faq, idx) => {
-                        const isOpen = openFaqIndex === idx;
-                        return (
-                          <div 
-                            key={idx} 
-                            className="border border-gray-200 rounded-xl overflow-hidden transition-all"
-                          >
-                            <button
-                              onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                              className="w-full flex items-center justify-between p-4 bg-gray-50/60 hover:bg-gray-100/80 transition-colors text-left font-semibold text-xs text-black cursor-pointer"
-                            >
-                              <span>{faq.question}</span>
-                              {isOpen ? <ChevronUp className="w-4 h-4 text-gray-500 shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-500 shrink-0" />}
-                            </button>
-                            {isOpen && (
-                              <div className="p-4 bg-white border-t border-gray-150 text-xs text-gray-600 leading-relaxed font-normal">
-                                {faq.answer}
-                              </div>
-                            )}
+                      {selectedCourse.howItWorks.steps.map((st, idx) => (
+                        <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-gray-50/80 border border-gray-150 rounded-xl">
+                          <div className="bg-black text-white font-mono font-bold text-[11px] px-2.5 py-1 rounded-md shrink-0 w-fit">
+                            {st.step}
                           </div>
-                        );
-                      })}
+                          <div className="space-y-0.5">
+                            <h3 className="text-xs font-bold text-black">{st.title}</h3>
+                            <p className="text-xs text-gray-600 leading-relaxed font-normal">{st.description}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  </div>
+                )}
+
+                {/* Brokerage Access Notice */}
+                {selectedCourse.brokerageNotice && (
+                  <div className="p-6 bg-gradient-to-r from-emerald-950 via-neutral-900 to-black text-white rounded-2xl space-y-3 shadow-lg">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
+                      <Building2 className="w-4 h-4 text-emerald-400" />
+                      <span>{selectedCourse.brokerageNotice.title}</span>
+                    </div>
+                    <div className="space-y-2 text-xs text-gray-300 leading-relaxed font-normal">
+                      {selectedCourse.brokerageNotice.paragraphs.map((p, idx) => (
+                        <p key={idx}>{p}</p>
+                      ))}
+                    </div>
+                    {onOpenChatWithPrompt && (
+                      <button
+                        onClick={() => onOpenChatWithPrompt("I need to verify my course access as an active agent.")}
+                        className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-lg transition-colors cursor-pointer"
+                      >
+                        Verify My Course Access →
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Florida Licensing Notice */}
+                {selectedCourse.licensingNotice && (
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-3 text-xs text-gray-500 leading-relaxed">
+                    <div className="flex items-center gap-2 font-mono font-bold text-[10px] uppercase text-gray-700">
+                      <Building2 className="w-4 h-4 text-gray-700" />
+                      <span>Official Regulatory Notice</span>
+                    </div>
+                    {selectedCourse.licensingNotice.paragraphs.map((p, idx) => (
+                      <p key={idx}>{p}</p>
+                    ))}
                   </div>
                 )}
 
