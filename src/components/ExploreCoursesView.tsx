@@ -93,6 +93,8 @@ export default function ExploreCoursesView({
     }
   };
 
+  const isProDev = selectedCourse?.category === "Professional Development";
+
   return (
     <div className="w-full min-h-screen bg-[#FAFAFA] pt-24 pb-28 text-left font-sans antialiased">
       <div className="max-w-7xl mx-auto px-6">
@@ -132,7 +134,7 @@ export default function ExploreCoursesView({
           >
             {/* PRODUCT HEADER BANNER */}
             <div className="bg-white border border-gray-150 rounded-3xl p-6 sm:p-12 shadow-[0_4px_30px_rgba(0,0,0,0.02)] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-emerald-50/50 via-gray-50/30 to-transparent rounded-full blur-3xl pointer-events-none" />
+              <div className={`absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl ${isProDev ? "from-blue-50/70 via-indigo-50/30" : "from-emerald-50/50 via-gray-50/30"} to-transparent rounded-full blur-3xl pointer-events-none`} />
               
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start relative z-10">
                 <div className="lg:col-span-8 space-y-6">
@@ -149,7 +151,7 @@ export default function ExploreCoursesView({
                       <Clock className="w-3.5 h-3.5 text-gray-500" />
                       {selectedCourse.hours}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white text-[11px] font-mono font-bold uppercase tracking-wider">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${isProDev ? "bg-blue-600 text-white" : "bg-black text-white"} text-[11px] font-mono font-bold uppercase tracking-wider`}>
                       {selectedCourse.category}
                     </span>
                   </div>
@@ -157,7 +159,7 @@ export default function ExploreCoursesView({
                   {/* Title & Tagline */}
                   <div className="space-y-3">
                     {selectedCourse.productCode && (
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block">
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${isProDev ? "text-blue-600 bg-blue-50 border-blue-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"} px-2.5 py-1 rounded-md border inline-block`}>
                         {selectedCourse.productCode}
                       </span>
                     )}
@@ -165,7 +167,7 @@ export default function ExploreCoursesView({
                       {selectedCourse.title}
                     </h1>
                     {selectedCourse.heroTagline && (
-                      <p className="text-xl sm:text-2xl font-semibold text-emerald-700 font-display">
+                      <p className={`text-xl sm:text-2xl font-semibold ${isProDev ? "text-blue-600" : "text-emerald-700"} font-display`}>
                         {selectedCourse.heroTagline}
                       </p>
                     )}
@@ -176,10 +178,10 @@ export default function ExploreCoursesView({
 
                   {/* Trust Bar */}
                   {selectedCourse.trustBar && selectedCourse.trustBar.length > 0 && (
-                    <div className="p-4 bg-emerald-50/60 border border-emerald-200/60 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-emerald-950">
+                    <div className={`p-4 ${isProDev ? "bg-blue-50/60 border-blue-200/60 text-blue-950" : "bg-emerald-50/60 border-emerald-200/60 text-emerald-950"} border rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold`}>
                       {selectedCourse.trustBar.map((item, idx) => (
                         <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <CheckCircle2 className={`w-4 h-4 ${isProDev ? "text-blue-600" : "text-emerald-600"} shrink-0`} />
                           <span>{item}</span>
                         </div>
                       ))}
@@ -229,8 +231,8 @@ export default function ExploreCoursesView({
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <p className={`text-xs ${isProDev ? "text-blue-700" : "text-emerald-700"} font-semibold flex items-center gap-1`}>
+                      <Check className={`w-3.5 h-3.5 ${isProDev ? "text-blue-600" : "text-emerald-600"}`} />
                       Instant HighLevel Student Access Included
                     </p>
                   </div>
@@ -242,7 +244,7 @@ export default function ExploreCoursesView({
                         Choose Your Preferred Language
                       </span>
                       <p className="text-[11px] text-gray-500 text-center leading-snug">
-                        Both courses provide the same Florida state-approved curriculum and satisfy the same Continuing Education requirement.
+                        Both courses provide the same curriculum and satisfy the same Professional Development learning objectives.
                       </p>
                       <div className="grid grid-cols-1 gap-2.5 pt-1">
                         {selectedCourse.languageCheckouts.map((lang, idx) => (
@@ -288,10 +290,10 @@ export default function ExploreCoursesView({
                         onClick={() => setNotifyModalCourse(selectedCourse)}
                         className="w-full bg-black hover:bg-neutral-900 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01]"
                       >
-                        <Mail className="w-4 h-4 text-emerald-400" />
+                        <Mail className={`w-4 h-4 ${isProDev ? "text-blue-400" : "text-emerald-400"}`} />
                         <span>Notify Me When Available</span>
                       </button>
-                      <p className="text-[11px] text-emerald-900 bg-emerald-50 border border-emerald-200/60 p-2.5 rounded-lg text-center font-medium">
+                      <p className={`text-[11px] ${isProDev ? "text-blue-900 bg-blue-50 border-blue-200/60" : "text-emerald-900 bg-emerald-50 border-emerald-200/60"} border p-2.5 rounded-lg text-center font-medium`}>
                         This course is currently in development. Click above to be notified as soon as enrollment opens.
                       </p>
                     </div>
@@ -365,7 +367,7 @@ export default function ExploreCoursesView({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {selectedCourse.whoIsThisFor.map((item, idx) => (
                       <div key={idx} className="bg-gray-50 border border-gray-150 rounded-xl p-4 flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                        <div className={`w-6 h-6 rounded-full ${isProDev ? "bg-blue-100 text-blue-800" : "bg-emerald-100 text-emerald-800"} flex items-center justify-center shrink-0 mt-0.5`}>
                           <Check className="w-3.5 h-3.5 font-bold" />
                         </div>
                         <p className="text-xs text-gray-700 leading-relaxed font-medium">
@@ -412,7 +414,7 @@ export default function ExploreCoursesView({
                     {selectedCourse.features.map((feat, idx) => (
                       <div key={idx} className="p-4 rounded-xl border border-gray-150 bg-white shadow-xs space-y-2">
                         <div className="w-8 h-8 rounded-lg bg-gray-100 text-black flex items-center justify-center">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <CheckCircle2 className={`w-4 h-4 ${isProDev ? "text-blue-600" : "text-emerald-600"}`} />
                         </div>
                         <p className="text-xs font-bold text-gray-900 leading-snug">
                           {feat}
@@ -426,7 +428,7 @@ export default function ExploreCoursesView({
                 {selectedCourse.whichCourseTable && selectedCourse.whichCourseTable.length > 0 && (
                   <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
                     <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-black">
-                      <HelpCircle className="w-4 h-4 text-emerald-600" />
+                      <HelpCircle className={`w-4 h-4 ${isProDev ? "text-blue-600" : "text-emerald-600"}`} />
                       <span>Requirements Guide</span>
                     </div>
                     <div className="space-y-2">
@@ -457,15 +459,15 @@ export default function ExploreCoursesView({
                       </table>
                     </div>
 
-                    <div className="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl space-y-2 text-xs">
-                      <p className="font-bold text-emerald-950">Still unsure?</p>
-                      <p className="text-emerald-900 leading-relaxed">
+                    <div className={`p-4 ${isProDev ? "bg-blue-50/70 border-blue-200/80" : "bg-emerald-50/70 border-emerald-200/80"} border rounded-xl space-y-2 text-xs`}>
+                      <p className={`font-bold ${isProDev ? "text-blue-950" : "text-emerald-950"}`}>Still unsure?</p>
+                      <p className={`${isProDev ? "text-blue-900" : "text-emerald-900"} leading-relaxed`}>
                         Our Student Success Team is happy to help you determine which education requirement most likely applies to your current licensing status before you enroll.
                       </p>
                       {onOpenChatWithPrompt && (
                         <button
                           onClick={() => onOpenChatWithPrompt("I need help determining which Florida course applies to my licensing status before enrolling.")}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-black hover:text-emerald-800 underline pt-1 cursor-pointer"
+                          className={`inline-flex items-center gap-1.5 text-xs font-bold text-black ${isProDev ? "hover:text-blue-800" : "hover:text-emerald-800"} underline pt-1 cursor-pointer`}
                         >
                           Request Your Upgraded Renewal Review™
                         </button>
@@ -478,7 +480,7 @@ export default function ExploreCoursesView({
                 {selectedCourse.renewalReview && (
                   <div className="bg-gradient-to-br from-neutral-900 via-black to-neutral-900 text-white rounded-2xl p-6 sm:p-10 space-y-6 shadow-xl">
                     <div className="space-y-2">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-3 py-1 rounded-full inline-block">
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${isProDev ? "text-blue-400 bg-blue-950/80 border-blue-800" : "text-emerald-400 bg-emerald-950/80 border-emerald-800"} border px-3 py-1 rounded-full inline-block`}>
                         {selectedCourse.renewalReview.title}
                       </span>
                       <h2 className="text-2xl font-bold font-display text-white tracking-tight">
@@ -494,7 +496,7 @@ export default function ExploreCoursesView({
 
                     {selectedCourse.renewalReview.whyCreated && (
                       <div className="pt-4 border-t border-neutral-800 space-y-3">
-                        <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+                        <h3 className={`text-xs font-mono font-bold uppercase tracking-wider ${isProDev ? "text-blue-400" : "text-emerald-400"}`}>
                           Why We Created The Upgraded Renewal Review™
                         </h3>
                         <div className="space-y-2 text-xs text-gray-400 leading-relaxed">
@@ -511,7 +513,7 @@ export default function ExploreCoursesView({
                 {selectedCourse.renewalJourney && (
                   <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
                     <div className="space-y-2">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full inline-block">
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${isProDev ? "text-blue-600 bg-blue-50 border-blue-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"} border px-2.5 py-1 rounded-full inline-block`}>
                         Step-by-Step Experience
                       </span>
                       <h2 className="text-2xl font-bold text-black font-display tracking-tight">
@@ -565,7 +567,7 @@ export default function ExploreCoursesView({
                           {selectedCourse.whyChooseUpgraded.map((item, idx) => (
                             <div key={idx} className="space-y-1">
                               <p className="text-xs font-bold text-black flex items-center gap-1.5">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <CheckCircle2 className={`w-3.5 h-3.5 ${isProDev ? "text-blue-600" : "text-emerald-600"} shrink-0`} />
                                 {item.title}
                               </p>
                               <p className="text-[11px] text-gray-500 pl-5 leading-snug">
@@ -583,7 +585,7 @@ export default function ExploreCoursesView({
                 {selectedCourse.howItWorks && (
                   <div className="bg-white border border-gray-150 rounded-2xl p-6 sm:p-10 space-y-6 shadow-sm">
                     <div className="space-y-2">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full inline-block">
+                      <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${isProDev ? "text-blue-600 bg-blue-50 border-blue-200" : "text-emerald-600 bg-emerald-50 border-emerald-200"} border px-2.5 py-1 rounded-full inline-block`}>
                         Simple Process
                       </span>
                       <h2 className="text-2xl font-bold text-black font-display tracking-tight">
@@ -609,9 +611,9 @@ export default function ExploreCoursesView({
 
                 {/* Brokerage Access Notice */}
                 {selectedCourse.brokerageNotice && (
-                  <div className="p-6 bg-gradient-to-r from-emerald-950 via-neutral-900 to-black text-white rounded-2xl space-y-3 shadow-lg">
-                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
-                      <Building2 className="w-4 h-4 text-emerald-400" />
+                  <div className={`p-6 bg-gradient-to-r ${isProDev ? "from-slate-950 via-blue-950 to-black" : "from-emerald-950 via-neutral-900 to-black"} text-white rounded-2xl space-y-3 shadow-lg`}>
+                    <div className={`flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest ${isProDev ? "text-blue-400" : "text-emerald-400"}`}>
+                      <Building2 className={`w-4 h-4 ${isProDev ? "text-blue-400" : "text-emerald-400"}`} />
                       <span>{selectedCourse.brokerageNotice.title}</span>
                     </div>
                     <div className="space-y-2 text-xs text-gray-300 leading-relaxed font-normal">
@@ -622,7 +624,7 @@ export default function ExploreCoursesView({
                     {onOpenChatWithPrompt && (
                       <button
                         onClick={() => onOpenChatWithPrompt("I need to verify my course access as an active agent.")}
-                        className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-lg transition-colors cursor-pointer"
+                        className={`mt-2 inline-flex items-center gap-1.5 px-4 py-2 ${isProDev ? "bg-blue-500 hover:bg-blue-400" : "bg-emerald-500 hover:bg-emerald-400"} text-black font-bold text-xs rounded-lg transition-colors cursor-pointer`}
                       >
                         Verify My Course Access →
                       </button>
@@ -670,7 +672,9 @@ export default function ExploreCoursesView({
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-50">
                       <span className="text-gray-400">Credit Submission:</span>
-                      <span className="font-semibold text-emerald-700">Automated Direct</span>
+                      <span className={`font-semibold ${isProDev ? "text-blue-700" : "text-emerald-700"}`}>
+                        {isProDev ? "Self-Paced Certificate" : "Automated Direct"}
+                      </span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="text-gray-400">Support Email:</span>
@@ -785,7 +789,7 @@ export default function ExploreCoursesView({
                           DBPR Approved
                         </span>
                       ) : (
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
                           {course.badge && course.badge.toLowerCase() !== course.category.toLowerCase() ? course.badge : "Pro Certificate"}
                         </span>
                       )}
