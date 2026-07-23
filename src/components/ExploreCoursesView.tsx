@@ -786,7 +786,7 @@ export default function ExploreCoursesView({
                         </span>
                       ) : (
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-0.5 rounded-full">
-                          {course.badge || "Professional"}
+                          {course.badge && course.badge.toLowerCase() !== course.category.toLowerCase() ? course.badge : "Pro Certificate"}
                         </span>
                       )}
                     </div>

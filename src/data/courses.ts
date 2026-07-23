@@ -876,7 +876,7 @@ export const COURSES: Course[] = [
     price: "$199 USD",
     isLive: true,
     checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767",
-    badge: "Professional Development",
+    badge: "AI & Automation",
     dbprApproved: false,
     accessPeriod: "Lifetime Access",
     language: "Available in English & Spanish",
@@ -1019,6 +1019,318 @@ export const COURSES: Course[] = [
       {
         question: "How long will I have access?",
         answer: "Your enrollment includes lifetime access to the course and its available resources."
+      },
+      {
+        question: "Is the course available in English and Spanish?",
+        answer: "Language availability may vary by course. Please refer to the enrollment page for current language options."
+      }
+    ]
+  },
+  {
+    id: "business-planning-real-estate",
+    slug: "business-planning-for-real-estate-professionals",
+    productCode: "PRODUCT 06",
+    title: "Business Planning for Real Estate Professionals",
+    headline: "Business Planning for Modern Real Estate Professionals",
+    heroTagline: "Build a Business. Not Just a Career.",
+    category: "Professional Development",
+    hours: "Self-Paced",
+    price: "$199 USD",
+    isLive: true,
+    checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767",
+    badge: "Strategy & Operations",
+    dbprApproved: false,
+    accessPeriod: "Lifetime Access",
+    language: "Available in English & Spanish",
+    description:
+      "Success in real estate doesn't happen by chance.\n\nIt happens through intentional planning, consistent execution, and the discipline to build a business that can grow year after year.\n\nWhether you're just starting your career or looking to take your business to the next level, this course will help you create a clear roadmap for sustainable growth.\n\nBecause the most successful real estate professionals don't simply work harder. They work with purpose.",
+    whoIsThisFor: [
+      "Build a clear vision for your business.",
+      "Set realistic production and income goals.",
+      "Develop consistent lead generation strategies.",
+      "Improve time management and productivity.",
+      "Track meaningful business metrics.",
+      "Build systems that support long-term growth.",
+      "Create a business that aligns with your personal goals and lifestyle."
+    ],
+    whatYouWillLearn: [
+      "Creating Your Business Vision: Define what success means to you and establish a clear direction for your business.",
+      "Goal Setting & Reverse Planning: Learn how to establish meaningful production goals and reverse engineer the activities needed to achieve them.",
+      "Lead Generation Strategy: Identify lead sources, build a balanced pipeline, and develop systems that support consistent business growth.",
+      "Time Management & Productivity: Prioritize high-value activities, organize your schedule, and maximize your most valuable resource—your time.",
+      "Tracking Performance: Understand the key performance indicators (KPIs) that help measure progress and support informed business decisions.",
+      "Systems & Business Operations: Create repeatable processes that improve efficiency, consistency, and client experience.",
+      "Long-Term Growth Planning: Build a business that can adapt, scale, and continue growing as your career evolves."
+    ],
+    features: [
+      "Complete Online Course with Lifetime Access",
+      "Downloadable Business Planning Workbook",
+      "Goal-Setting Templates & Annual Worksheets",
+      "KPI Tracking Tools & Certificate of Completion"
+    ],
+    trustBar: [
+      "Practical Real Estate Business Planning",
+      "Action-Oriented Execution Framework",
+      "Includes Lifetime Course Access",
+      "Available in English & Spanish"
+    ],
+    languageCheckouts: [
+      {
+        label: "English",
+        flag: "🇺🇸",
+        buttonText: "Enroll in English",
+        checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767"
+      },
+      {
+        label: "Español",
+        flag: "🇪🇸",
+        buttonText: "Inscribirse en Español",
+        checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767"
+      }
+    ],
+    renewalReview: {
+      title: "WHY THIS COURSE IS DIFFERENT",
+      subtitle: "Many business planning courses focus on theory. This course focuses on execution.",
+      paragraphs: [
+        "Instead of overwhelming you with complicated business concepts, we provide a practical framework that helps you organize your goals, measure your progress, and build sustainable habits.",
+        "Because success isn't created by having a perfect plan. It's created by consistently following a meaningful one."
+      ],
+      whyCreated: [
+        "Practical Frameworks: Simple systems that are easy to implement.",
+        "Real Estate Focused: Designed specifically for the realities of today's real estate industry.",
+        "Action-Oriented Learning: Leave every lesson with clear next steps.",
+        "Learn at Your Own Pace: Study whenever and wherever it works best for you."
+      ]
+    },
+    renewalJourney: {
+      title: "WHAT'S INCLUDED",
+      subtitle: "Your enrollment includes everything you need to build a clear strategy for sustainable business growth.",
+      items: [
+        {
+          title: "Complete Online Course",
+          description: "Step-by-step training and tutorials designed specifically for real estate professionals."
+        },
+        {
+          title: "Lifetime Access",
+          description: "Revisit lessons, worksheets, and business planning resources whenever you need them."
+        },
+        {
+          title: "Downloadable Business Planning Workbook",
+          description: "Comprehensive workbook to guide your goal-setting and strategy execution."
+        },
+        {
+          title: "Goal-Setting & KPI Templates",
+          description: "Annual planning worksheets, performance trackers, and productivity resources."
+        },
+        {
+          title: "Certificate of Completion",
+          description: "Earn an official certificate demonstrating your commitment to professional development."
+        }
+      ]
+    },
+    whyChooseUpgraded: [
+      {
+        title: "Practical Frameworks",
+        description: "Simple systems that are easy to implement."
+      },
+      {
+        title: "Real Estate Focused",
+        description: "Designed specifically for the realities of today's real estate industry."
+      },
+      {
+        title: "Action-Oriented Learning",
+        description: "Leave every lesson with clear next steps for your business."
+      },
+      {
+        title: "Learn at Your Own Pace",
+        description: "Study whenever and wherever it works best for your schedule."
+      },
+      {
+        title: "Education That Evolves With You",
+        description: "Business strategies evolve—and so should your education."
+      }
+    ],
+    licensingNotice: {
+      schoolName: "Upgraded Real Estate School",
+      licenseNo: "ZH1002624",
+      paragraphs: [
+        "This Professional Development course is offered for educational purposes only and is not intended to satisfy Florida real estate pre-license, post-license, or continuing education requirements. Unless otherwise specifically indicated, completion of this course does not provide state licensing credit or continuing education credit.",
+        "Course content is designed to support professional development and business education for real estate professionals. Business planning strategies should be adapted to each individual's goals, market conditions, brokerage policies, and applicable legal and regulatory requirements.",
+        "Students remain responsible for complying with all applicable laws, brokerage policies, MLS rules, licensing regulations, and ethical obligations when implementing the concepts presented in this course."
+      ]
+    },
+    faqs: [
+      {
+        question: "Is this course only for new agents?",
+        answer: "No. Whether you're building your first business plan or refining an established business, the principles taught in this course are applicable at every stage of your career."
+      },
+      {
+        question: "Do I need previous business planning experience?",
+        answer: "Not at all. The course is designed to guide you step by step, regardless of your experience level."
+      },
+      {
+        question: "Will I create my own business plan?",
+        answer: "Yes. By the end of the course, you'll have practical tools, templates, and a personalized framework that you can continue refining as your business grows."
+      },
+      {
+        question: "How long will I have access?",
+        answer: "Your enrollment includes lifetime access to the course and available resources."
+      },
+      {
+        question: "Is the course available in English and Spanish?",
+        answer: "Language availability may vary. Please refer to the enrollment page for current language options."
+      }
+    ]
+  },
+  {
+    id: "marketing-business-growth",
+    slug: "marketing-and-business-growth",
+    productCode: "PRODUCT 07",
+    title: "Marketing & Business Growth",
+    headline: "Marketing & Business Growth for Modern Real Estate Professionals",
+    heroTagline: "Build a Business People Remember.",
+    category: "Professional Development",
+    hours: "Self-Paced",
+    price: "$199 USD",
+    isLive: true,
+    checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767",
+    badge: "Branding & Marketing",
+    dbprApproved: false,
+    accessPeriod: "Lifetime Access",
+    language: "Available in English & Spanish",
+    description:
+      "Success in real estate isn't determined by who works the hardest.\n\nIt's built by professionals who know how to communicate their value, build trust, create meaningful relationships, and remain visible in a competitive marketplace.\n\nMarketing isn't simply about generating leads.\n\nIt's about building a business people remember—and a brand clients confidently recommend.\n\nThis course is designed to help you develop practical marketing strategies and sustainable business growth systems that support long-term success.",
+    whoIsThisFor: [
+      "Build a recognizable personal brand.",
+      "Generate more qualified leads.",
+      "Improve your marketing strategy.",
+      "Strengthen your online presence.",
+      "Develop consistent client communication.",
+      "Increase referrals and repeat business.",
+      "Build long-term business growth systems."
+    ],
+    whatYouWillLearn: [
+      "Personal Branding: Define what makes you different and build a professional brand that reflects your values, expertise, and unique market position.",
+      "Digital Marketing Fundamentals: Understand how modern consumers search for information and how to position your business across today's digital landscape.",
+      "Content Marketing: Learn how to create valuable content that educates, builds trust, and keeps you top of mind with your audience.",
+      "Social Media Strategy: Develop a consistent social media presence that supports your business goals without feeling overwhelming.",
+      "Client Relationship Marketing: Create systems that strengthen client relationships before, during, and long after every transaction.",
+      "Referral & Repeat Business: Build a business driven by long-term relationships, referrals, and exceptional client experiences.",
+      "Sustainable Business Growth: Develop marketing strategies that support consistent, measurable, and scalable business growth."
+    ],
+    features: [
+      "Complete Online Course with Lifetime Access",
+      "Marketing Planning Worksheets & Branding Exercises",
+      "Social Media Templates & Client Communication Resources",
+      "Business Growth Tools & Certificate of Completion"
+    ],
+    trustBar: [
+      "Practical Real Estate Marketing & Branding",
+      "Relationship & Trust-Driven Strategies",
+      "Includes Lifetime Course Access",
+      "Available in English & Spanish"
+    ],
+    languageCheckouts: [
+      {
+        label: "English",
+        flag: "🇺🇸",
+        buttonText: "Enroll in English",
+        checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767"
+      },
+      {
+        label: "Español",
+        flag: "🇪🇸",
+        buttonText: "Inscribirse en Español",
+        checkoutUrl: "https://link.fastpaydirect.com/payment-link/6a5fde69a655fa0b802a5767"
+      }
+    ],
+    renewalReview: {
+      title: "WHY THIS COURSE IS DIFFERENT",
+      subtitle: "Many marketing courses focus on algorithms, trends, or shortcuts. This course focuses on building trust.",
+      paragraphs: [
+        "Rather than chasing the latest tactic, you'll learn timeless principles that help create meaningful relationships, strengthen your professional reputation, and support long-term business growth.",
+        "Because the strongest marketing strategy isn't the loudest. It's the one your clients remember."
+      ],
+      whyCreated: [
+        "Practical Strategies: Marketing ideas you can apply immediately.",
+        "Real Estate Focused: Every lesson is designed specifically for the real estate industry.",
+        "Long-Term Thinking: Build sustainable marketing systems instead of short-term tactics.",
+        "Learn at Your Own Pace: Flexible online learning that fits your schedule."
+      ]
+    },
+    renewalJourney: {
+      title: "WHAT'S INCLUDED",
+      subtitle: "Your enrollment includes everything you need to create a marketing strategy that supports long-term growth.",
+      items: [
+        {
+          title: "Complete Online Course",
+          description: "Step-by-step marketing modules designed specifically for real estate agents and brokers."
+        },
+        {
+          title: "Lifetime Access",
+          description: "Revisit lessons, worksheets, and resources whenever you need them."
+        },
+        {
+          title: "Marketing Worksheets & Branding Exercises",
+          description: "Actionable planning guides to clarify your unique value proposition."
+        },
+        {
+          title: "Social Media & Communication Templates",
+          description: "Ready-to-use content ideas, client follow-up sequences, and relationship marketing tools."
+        },
+        {
+          title: "Certificate of Completion",
+          description: "Earn an official certificate demonstrating your commitment to marketing excellence."
+        }
+      ]
+    },
+    whyChooseUpgraded: [
+      {
+        title: "Practical Strategies",
+        description: "Marketing ideas you can apply immediately to your business."
+      },
+      {
+        title: "Real Estate Focused",
+        description: "Every lesson is designed specifically for the real estate industry."
+      },
+      {
+        title: "Long-Term Thinking",
+        description: "Build sustainable marketing systems instead of short-term tactics."
+      },
+      {
+        title: "Learn at Your Own Pace",
+        description: "Flexible online learning that fits your busy schedule."
+      },
+      {
+        title: "Education That Evolves With You",
+        description: "As marketing evolves, so will our educational resources."
+      }
+    ],
+    licensingNotice: {
+      schoolName: "Upgraded Real Estate School",
+      licenseNo: "ZH1002624",
+      paragraphs: [
+        "This Professional Development course is offered for educational purposes only and is not intended to satisfy Florida real estate pre-license, post-license, or continuing education requirements. Unless otherwise specifically indicated, completion of this course does not provide state licensing credit or continuing education credit.",
+        "Course content is designed to support professional development and business education for real estate professionals. Marketing strategies should always be implemented in compliance with applicable laws, brokerage policies, MLS rules, advertising regulations, fair housing requirements, and the REALTOR® Code of Ethics, when applicable.",
+        "Students remain responsible for ensuring that all marketing materials, advertising practices, and business activities comply with the legal and ethical requirements applicable to their market and professional practice."
+      ]
+    },
+    faqs: [
+      {
+        question: "Is this course designed for new agents?",
+        answer: "Yes. The course is valuable for newly licensed professionals as well as experienced agents looking to strengthen their marketing and business development strategies."
+      },
+      {
+        question: "Do I need advanced marketing knowledge?",
+        answer: "No. The course is designed to provide practical guidance regardless of your experience level."
+      },
+      {
+        question: "Does the course include social media strategies?",
+        answer: "Yes. You'll learn how social media fits into a broader marketing strategy focused on relationship building and long-term brand development."
+      },
+      {
+        question: "How long will I have access?",
+        answer: "Your enrollment includes lifetime access to the course and available resources."
       },
       {
         question: "Is the course available in English and Spanish?",
