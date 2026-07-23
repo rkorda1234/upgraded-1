@@ -25,9 +25,9 @@ interface LeadershipViewProps {
 }
 
 export default function LeadershipView({ onOpenChat, onExploreLearningPaths }: LeadershipViewProps) {
-  const [adrianaImgSrc, setAdrianaImgSrc] = useState("/Adriana.png");
-  const [enriqueImgSrc, setEnriqueImgSrc] = useState("/Enrique (1).png");
-  const [andresImgSrc, setAndresImgSrc] = useState("/Andres.png");
+  const [adrianaImgSrc, setAdrianaImgSrc] = useState("https://assets.cdn.filesafe.space/f9BI6PkMYA8EmsOEt8AU/media/6a5ff5113db5490e90c931fc.png");
+  const [enriqueImgSrc, setEnriqueImgSrc] = useState("https://assets.cdn.filesafe.space/f9BI6PkMYA8EmsOEt8AU/media/6a623486f7d31b0eb4133359.png");
+  const [andresImgSrc, setAndresImgSrc] = useState("https://assets.cdn.filesafe.space/f9BI6PkMYA8EmsOEt8AU/media/6a6234862e0540011f2ecfc3.png");
   return (
     <div className="w-full flex flex-col">
       
