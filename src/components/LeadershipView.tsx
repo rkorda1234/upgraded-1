@@ -16,7 +16,7 @@ import leadershipHeroImg from "../assets/images/leadership_hero_1784660032593.jp
 import licensingHeroImg from "../assets/images/licensing_hero_1784649720836.jpg";
 import agentsCollaboratingImg from "../assets/images/agents_collaborating_1784649734023.jpg";
 import adrianaHeadshotImg from "../assets/images/adriana_headshot_1784738478692.jpg";
-import andresHeadshotImg from "../assets/images/andres_headshot_1784738503472.jpg";
+import andresHeadshotImg from "../assets/images/andres_korda_headshot_1784820628787.jpg";
 import enriqueHeadshotImg from "../assets/images/enrique_headshot_1784738489788.jpg";
 
 interface LeadershipViewProps {
