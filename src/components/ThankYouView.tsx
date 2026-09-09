@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Home
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface ThankYouViewProps {
   onBackToHome: () => void;
@@ -19,6 +20,8 @@ interface ThankYouViewProps {
 }
 
 export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYouViewProps) {
+  const { isSpanish } = useLanguage();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -44,13 +47,15 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200/80 rounded-full text-[11px] font-mono font-bold text-emerald-800 uppercase tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Payment & Enrollment Confirmed
+                {isSpanish ? "Pago e Inscripción Confirmados" : "Payment & Enrollment Confirmed"}
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-black font-display tracking-tight leading-tight">
-                Thank You For Your Order!
+                {isSpanish ? "¡Gracias por tu Orden!" : "Thank You For Your Order!"}
               </h1>
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                Welcome to Upgraded Real Estate Academy. Your enrollment has been successfully processed and your student account is ready.
+                {isSpanish 
+                  ? "Te damos la bienvenida a Upgraded Real Estate Academy. Tu inscripción ha sido procesada con éxito y tu cuenta de estudiante está lista."
+                  : "Welcome to Upgraded Real Estate Academy. Your enrollment has been successfully processed and your student account is ready."}
               </p>
             </div>
           </div>
@@ -59,13 +64,15 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
           <div className="bg-black text-white rounded-2xl p-6 sm:p-8 space-y-5 shadow-xl relative z-10 border border-neutral-800">
             <div className="space-y-2">
               <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-emerald-400 block">
-                Immediate Access
+                {isSpanish ? "Acceso Inmediato" : "Immediate Access"}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-sans tracking-tight">
-                Access Your HighLevel Student Portal
+                {isSpanish ? "Accede a Tu Portal de Estudiante HighLevel" : "Access Your HighLevel Student Portal"}
               </h2>
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-sans font-normal">
-                Click below to log in to your learning dashboard and begin your course modules right away.
+                {isSpanish 
+                  ? "Haz clic a continuación para ingresar a tu panel de estudio y comenzar tus módulos de curso de inmediato."
+                  : "Click below to log in to your learning dashboard and begin your course modules right away."}
               </p>
             </div>
 
@@ -77,7 +84,7 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
                 className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-2.5 text-sm sm:text-base uppercase tracking-wider group cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
                 <GraduationCap className="w-5 h-5" />
-                <span>Go To Student Portal Login</span>
+                <span>{isSpanish ? "Ir al Portal de Estudiantes" : "Go To Student Portal Login"}</span>
                 <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
 
@@ -91,7 +98,7 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
           <div className="space-y-6 pt-4 border-t border-gray-100 relative z-10">
             <h3 className="text-xl font-bold text-black font-sans tracking-tight flex items-center gap-2.5">
               <Sparkles className="w-5 h-5 text-emerald-600" />
-              What Happens Next?
+              {isSpanish ? "¿Qué Sucede Ahora?" : "What Happens Next?"}
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -99,9 +106,13 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
                 <div className="w-9 h-9 rounded-xl bg-black text-white text-sm font-mono font-bold flex items-center justify-center shrink-0">
                   1
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">Check Your Email</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "Revisa Tu Correo" : "Check Your Email"}
+                </h4>
                 <p className="text-sm text-gray-600 leading-relaxed font-sans font-normal">
-                  An automated email from Upgraded Real Estate Academy has been sent to your inbox with your login credentials and receipt details.
+                  {isSpanish 
+                    ? "Se ha enviado un correo automatizado de Upgraded Real Estate Academy a tu bandeja de entrada con tus credenciales de acceso y comprobante."
+                    : "An automated email from Upgraded Real Estate Academy has been sent to your inbox with your login credentials and receipt details."}
                 </p>
               </div>
 
@@ -109,9 +120,15 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
                 <div className="w-9 h-9 rounded-xl bg-black text-white text-sm font-mono font-bold flex items-center justify-center shrink-0">
                   2
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">Log In & Learn</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "Inicia Sesión y Aprende" : "Log In & Learn"}
+                </h4>
                 <p className="text-sm text-gray-600 leading-relaxed font-sans font-normal">
-                  Log in at <strong className="text-black font-semibold">learn.upgradedreacademy.com/login</strong> on any desktop, tablet, or mobile device to start learning.
+                  {isSpanish ? (
+                    <>Inicia sesión en <strong className="text-black font-semibold">learn.upgradedreacademy.com/login</strong> desde cualquier computadora, tableta o móvil para comenzar.</>
+                  ) : (
+                    <>Log in at <strong className="text-black font-semibold">learn.upgradedreacademy.com/login</strong> on any desktop, tablet, or mobile device to start learning.</>
+                  )}
                 </p>
               </div>
 
@@ -119,9 +136,13 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
                 <div className="w-9 h-9 rounded-xl bg-black text-white text-sm font-mono font-bold flex items-center justify-center shrink-0">
                   3
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">Self-Paced Progress</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "Avanza a Tu Propio Ritmo" : "Self-Paced Progress"}
+                </h4>
                 <p className="text-sm text-gray-600 leading-relaxed font-sans font-normal">
-                  Your progress is saved automatically. You have 1 full year of access to complete your course modules and assessments.
+                  {isSpanish 
+                    ? "Tu progreso se guarda automáticamente. Tienes 1 año completo de acceso para completar los módulos y evaluaciones de tu curso."
+                    : "Your progress is saved automatically. You have 1 full year of access to complete your course modules and assessments."}
                 </p>
               </div>
 
@@ -129,9 +150,13 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
                 <div className="w-9 h-9 rounded-xl bg-black text-white text-sm font-mono font-bold flex items-center justify-center shrink-0">
                   4
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">Automated DBPR Reporting</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "Reporte Automatizado al DBPR" : "Automated DBPR Reporting"}
+                </h4>
                 <p className="text-sm text-gray-600 leading-relaxed font-sans font-normal">
-                  For Florida licensing education courses, course completion records will be reported directly to the Florida DBPR.
+                  {isSpanish 
+                    ? "Para cursos de educación de licencias en Florida, tus registros de finalización se reportarán directamente al DBPR de Florida."
+                    : "For Florida licensing education courses, course completion records will be reported directly to the Florida DBPR."}
                 </p>
               </div>
             </div>
@@ -142,8 +167,12 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
             <div className="flex items-center gap-3.5">
               <Mail className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
-                <p className="text-black font-bold text-sm sm:text-base font-sans">Have questions or need login assistance?</p>
-                <p className="text-gray-500 text-xs sm:text-sm font-sans">Our student support team is ready to assist you.</p>
+                <p className="text-black font-bold text-sm sm:text-base font-sans">
+                  {isSpanish ? "¿Tienes preguntas o necesitas ayuda con tu acceso?" : "Have questions or need login assistance?"}
+                </p>
+                <p className="text-gray-500 text-xs sm:text-sm font-sans">
+                  {isSpanish ? "Nuestro equipo de soporte al estudiante está listo para asistirte." : "Our student support team is ready to assist you."}
+                </p>
               </div>
             </div>
             <a
@@ -161,14 +190,14 @@ export default function ThankYouView({ onBackToHome, onExploreCourses }: ThankYo
               className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-black font-bold rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
               <Home className="w-4 h-4" />
-              Return to Home
+              {isSpanish ? "Volver al Inicio" : "Return to Home"}
             </button>
             <button
               onClick={onExploreCourses}
               className="inline-flex items-center gap-2 px-6 py-3 bg-black hover:bg-neutral-900 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
               <BookOpen className="w-4 h-4" />
-              Explore More Courses
+              {isSpanish ? "Explorar Más Cursos" : "Explore More Courses"}
             </button>
           </div>
 

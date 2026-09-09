@@ -16,8 +16,13 @@ import {
   Award, 
   GraduationCap,
   MessageSquare,
-  Volume2
+  Volume2,
+  Menu,
+  X,
+  Globe
 } from "lucide-react";
+import { useLanguage } from "./context/LanguageContext";
+import { UI_TRANSLATIONS } from "./i18n/translations";
 import PointerParticles from "./components/PointerParticles";
 import DynamicUpgradeTerminal from "./components/DynamicUpgradeTerminal";
 import AIChatConsole from "./components/AIChatConsole";
@@ -36,6 +41,10 @@ import WaitingListThankYouView from "./components/WaitingListThankYouView";
 import heroVisual from "./assets/images/upgraded_hero_visual_1784582864331.jpg";
 
 export default function App() {
+  const { language, setLanguage, isSpanish } = useLanguage();
+  const t = UI_TRANSLATIONS[language];
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const [activeView, setActiveView] = useState<'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you' | 'waiting_list_thank_you'>('home');
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -101,6 +110,7 @@ export default function App() {
     view: 'home' | 'courses' | 'licensing' | 'pro_dev' | 'leadership' | 'contact' | 'policy' | 'thank_you' | 'waiting_list_thank_you',
     opts?: { courseId?: string | null; category?: string | null; policyKey?: PolicyKey }
   ) => {
+    setMobileMenuOpen(false);
     setActiveView(view);
     const courseId = opts?.courseId !== undefined ? opts.courseId : (view === 'courses' ? selectedCourseId : null);
     const category = opts?.category !== undefined ? opts.category : (view === 'courses' ? selectedCategory : null);
@@ -297,21 +307,17 @@ export default function App() {
         <div className="absolute bottom-[-50px] right-[-50px] w-[300px] h-[300px] bg-gradient-to-tl from-gray-100 to-transparent rounded-full opacity-60 blur-3xl pointer-events-none" />
 
       {/* 2. Brand Header / Navigation */}
-      <nav className="sticky top-0 z-40 bg-[#FAFAFA]/80 backdrop-blur-md px-6 py-6 border-b border-gray-100">
+      <nav className="sticky top-0 z-40 bg-[#FAFAFA]/90 backdrop-blur-md px-6 py-5 border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div 
-            className="flex items-center gap-1.5 cursor-pointer select-none" 
+            className="flex items-center gap-2 cursor-pointer select-none" 
             onClick={() => navigateToView('home')}
           >
-            <span className="text-2xl font-black tracking-tight text-black font-sans flex items-center">
-              Upgr
-              <span className="inline-block mx-[0.5px] text-black">
-                <svg className="w-[18px] h-[18px] transform rotate-[-15deg] translate-y-[-1.5px]" viewBox="0 0 100 100" fill="currentColor">
-                  <path d="M50 12 L88 88 L50 68 L12 88 Z" />
-                </svg>
-              </span>
-              ded
-            </span>
+            <img 
+              src="/Upgraded-White-Logo.png" 
+              alt="Upgraded Real Estate Academy" 
+              className="h-7 sm:h-8 w-auto object-contain filter invert" 
+            />
           </div>
 
           {/* Nav Links */}
@@ -320,31 +326,31 @@ export default function App() {
               onClick={() => navigateToView('courses', { courseId: null })}
               className={`transition-colors cursor-pointer text-left ${activeView === 'courses' ? 'text-black font-bold' : 'hover:text-black'}`}
             >
-              COURSES
+              {t.nav.courses}
             </button>
             <button 
               onClick={() => navigateToView('licensing')}
               className={`transition-colors cursor-pointer text-left ${activeView === 'licensing' ? 'text-black font-bold' : 'hover:text-black'}`}
             >
-              LICENSING EDUCATION
+              {t.nav.licensing}
             </button>
             <button 
               onClick={() => navigateToView('pro_dev')}
               className={`transition-colors cursor-pointer text-left ${activeView === 'pro_dev' ? 'text-black font-bold' : 'hover:text-black'}`}
             >
-              PROFESSIONAL DEVELOPMENT
+              {t.nav.proDev}
             </button>
             <button 
               onClick={() => navigateToView('leadership')}
               className={`transition-colors cursor-pointer text-left ${activeView === 'leadership' ? 'text-black font-bold' : 'hover:text-black'}`}
             >
-              LEADERSHIP
+              {t.nav.leadership}
             </button>
             <button 
               onClick={() => navigateToView('contact')}
               className={`transition-colors cursor-pointer text-left ${activeView === 'contact' ? 'text-black font-bold' : 'hover:text-black'}`}
             >
-              CONTACT
+              {t.nav.contact}
             </button>
             <a 
               href="https://learn.upgradedreacademy.com/login"
@@ -352,21 +358,120 @@ export default function App() {
               rel="noopener noreferrer"
               className="hover:text-black transition-colors cursor-pointer text-left text-black font-extrabold"
             >
-              STUDENT LOGIN
+              {t.nav.studentLogin}
             </a>
           </div>
 
-          {/* Action Header Button */}
-          <div className="flex items-center gap-4">
+          {/* Action Header Button & Language Toggle */}
+          <div className="flex items-center gap-3">
+            {/* Language Switcher */}
+            <div className="flex items-center bg-gray-100 p-0.5 rounded-full border border-gray-200 text-xs font-mono font-bold">
+              <button
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={`px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer ${
+                  language === 'en' 
+                    ? 'bg-black text-white shadow-xs' 
+                    : 'text-gray-500 hover:text-black'
+                }`}
+                title="Switch to English"
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage('es')}
+                className={`px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer ${
+                  language === 'es' 
+                    ? 'bg-black text-white shadow-xs' 
+                    : 'text-gray-500 hover:text-black'
+                }`}
+                title="Cambiar a Español"
+              >
+                ES
+              </button>
+            </div>
+
             <button
               onClick={() => handleOpenChatWithPrompt()}
-              className="bg-black hover:bg-neutral-900 text-white px-5 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.98] hover:shadow-md cursor-pointer"
+              className="hidden sm:flex bg-black hover:bg-neutral-900 text-white px-4 sm:px-5 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm items-center gap-1.5 hover:scale-[1.03] active:scale-[0.98] hover:shadow-md cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-gray-300" />
-              AI Career Advisor
+              <span>{t.nav.aiAdvisor}</span>
+            </button>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="xl:hidden p-2 text-black hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="xl:hidden border-t border-gray-200 mt-4 pt-4 pb-2 flex flex-col gap-2 font-sans uppercase tracking-wider text-xs font-semibold"
+            >
+              <button 
+                onClick={() => navigateToView('courses', { courseId: null })}
+                className={`py-2 text-left transition-colors ${activeView === 'courses' ? 'text-black font-bold' : 'text-gray-600'}`}
+              >
+                {t.nav.courses}
+              </button>
+              <button 
+                onClick={() => navigateToView('licensing')}
+                className={`py-2 text-left transition-colors ${activeView === 'licensing' ? 'text-black font-bold' : 'text-gray-600'}`}
+              >
+                {t.nav.licensing}
+              </button>
+              <button 
+                onClick={() => navigateToView('pro_dev')}
+                className={`py-2 text-left transition-colors ${activeView === 'pro_dev' ? 'text-black font-bold' : 'text-gray-600'}`}
+              >
+                {t.nav.proDev}
+              </button>
+              <button 
+                onClick={() => navigateToView('leadership')}
+                className={`py-2 text-left transition-colors ${activeView === 'leadership' ? 'text-black font-bold' : 'text-gray-600'}`}
+              >
+                {t.nav.leadership}
+              </button>
+              <button 
+                onClick={() => navigateToView('contact')}
+                className={`py-2 text-left transition-colors ${activeView === 'contact' ? 'text-black font-bold' : 'text-gray-600'}`}
+              >
+                {t.nav.contact}
+              </button>
+              <a 
+                href="https://learn.upgradedreacademy.com/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2 text-left text-black font-extrabold"
+              >
+                {t.nav.studentLogin}
+              </a>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleOpenChatWithPrompt();
+                }}
+                className="mt-2 bg-black text-white py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-gray-300" />
+                <span>{t.nav.aiAdvisor}</span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {activeView === 'home' ? (
@@ -387,7 +492,7 @@ export default function App() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-200 rounded-full shadow-sm text-xs font-semibold text-gray-400"
           >
-            <span className="font-mono tracking-widest text-[9px] uppercase">The Future of Learning</span>
+            <span className="font-mono tracking-widest text-[9px] uppercase">{t.hero.futureBadge}</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -397,8 +502,18 @@ export default function App() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-[44px] sm:text-[64px] md:text-[76px] leading-[0.95] font-semibold tracking-tight text-black max-w-4xl mx-auto font-display"
           >
-            Where Modern <br />
-            Agents <span className="animate-gradient-text italic font-extrabold">Upgrade</span> Themselves.
+            {isSpanish ? (
+              <>
+                Donde los Agentes <br />
+                Modernos se <span className="animate-gradient-text italic font-extrabold">Superan</span> <br />
+                a Si Mismos
+              </>
+            ) : (
+              <>
+                {t.hero.titleLine1} <br />
+                {t.hero.titleLine2} <span className="animate-gradient-text italic font-extrabold">{t.hero.titleUpgrade}</span> {t.hero.titleLine3}
+              </>
+            )}
           </motion.h1>
 
           {/* Interactive dropdown component below the headline */}
@@ -437,13 +552,13 @@ export default function App() {
                 {/* Info Overlay inside image */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 z-20 space-y-1.5 text-left">
                   <span className="text-[10px] font-mono tracking-widest text-gray-400 uppercase font-bold">
-                    Florida State DBPR Provider
+                    {t.hero.providerBadge}
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-display">
-                    Premium Technological Hub
+                    {t.hero.hubTitle}
                   </h3>
                   <p className="text-gray-300 text-xs sm:text-sm max-w-md">
-                    Designed for high-performance Florida real estate professionals seeking modern certification paired with actionable AI and marketing blueprints.
+                    {t.hero.hubDesc}
                   </p>
                 </div>
               </div>
@@ -456,13 +571,15 @@ export default function App() {
               <div className="space-y-1.5 text-left">
                 <div className="flex items-center gap-2 text-black font-mono text-[10px] font-bold uppercase tracking-widest">
                   <Zap className="w-3.5 h-3.5 text-black" />
-                  Dual-Mode Assist
+                  {isSpanish ? "Asistencia Inteligente" : "Dual-Mode Assist"}
                 </div>
                 <h3 className="text-2xl font-bold text-black tracking-tight font-display">
-                  Instant AI Advice & Career Roadmap
+                  {isSpanish ? "Asesoría Inmediata con IA y Ruta de Carrera" : "Instant AI Advice & Career Roadmap"}
                 </h3>
                 <p className="text-gray-500 text-sm">
-                  Simulate voice conversations or drop questions about curriculum paths. Unmute for direct vocal response.
+                  {isSpanish 
+                    ? "Simula conversaciones de voz o haz preguntas sobre los caminos curriculares. Activa el sonido para respuesta vocal directa."
+                    : "Simulate voice conversations or drop questions about curriculum paths. Unmute for direct vocal response."}
                 </p>
               </div>
 
@@ -482,15 +599,30 @@ export default function App() {
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <div className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-white border border-gray-200 px-3.5 py-1 rounded-full shadow-sm">
               <Layers className="w-3 h-3 text-gray-500" />
-              Instructional Standard
+              {isSpanish ? "Estándar Educativo" : "Instructional Standard"}
             </div>
             <h2 className="text-3xl sm:text-5xl font-semibold text-black tracking-tight leading-tight font-display">
-              Education That Evolves With You
+              {isSpanish ? "Educación Que Evoluciona Contigo" : "Education That Evolves With You"}
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base leading-relaxed max-w-4xl mx-auto space-y-1.5 mt-6 px-4">
-              <span className="block">The way professionals learn should evolve just as quickly as the industry itself.</span>
-              <span className="block">Information has never been more accessible, yet access alone is no longer the challenge.</span>
-            </p>
+            {isSpanish ? (
+              <div className="text-gray-500 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto space-y-2.5 mt-6 px-4">
+                <p className="[text-wrap:balance] leading-relaxed">
+                  La educación de los profesionales debe evolucionar al compás de la industria.
+                </p>
+                <p className="[text-wrap:balance] leading-relaxed">
+                  La información nunca fue tan accesible, pero el acceso por sí solo ya no es el reto.
+                </p>
+              </div>
+            ) : (
+              <p className="text-gray-500 text-sm sm:text-base leading-relaxed max-w-4xl mx-auto space-y-1.5 mt-6 px-4">
+                <span className="block">
+                  The way professionals learn should evolve just as quickly as the industry itself.
+                </span>
+                <span className="block">
+                  Information has never been more accessible, yet access alone is no longer the challenge.
+                </span>
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -498,9 +630,13 @@ export default function App() {
               <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200 text-black">
                 <Compass className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold text-black font-display">Knowing What Matters</h3>
+              <h3 className="text-lg font-bold text-black font-display">
+                {isSpanish ? "Saber lo que Importa" : "Knowing What Matters"}
+              </h3>
               <p className="text-gray-500 text-xs leading-relaxed">
-                The challenge is knowing what truly matters. At Upgraded, we believe education should do more than deliver content. It should provide clarity.
+                {isSpanish 
+                  ? "El reto es saber lo que verdaderamente importa. En Upgraded, creemos que la educación debe brindar claridad y aplicabilidad práctica." 
+                  : "The challenge is knowing what truly matters. At Upgraded, we believe education should do more than deliver content. It should provide clarity."}
               </p>
             </div>
 
@@ -508,9 +644,13 @@ export default function App() {
               <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200 text-black">
                 <BookOpen className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold text-black font-display">Continuous Adaptability</h3>
+              <h3 className="text-lg font-bold text-black font-display">
+                {isSpanish ? "Adaptabilidad Continua" : "Continuous Adaptability"}
+              </h3>
               <p className="text-gray-500 text-xs leading-relaxed">
-                Our educational approach continuously evolves alongside the industry, helping professionals focus on the knowledge, skills, and strategies that create the greatest value.
+                {isSpanish 
+                  ? "Nuestro enfoque educativo evoluciona continuamente junto a la industria, ayudando a los profesionales a dominar las habilidades de mayor valor." 
+                  : "Our educational approach continuously evolves alongside the industry, helping professionals focus on the knowledge, skills, and strategies that create the greatest value."}
               </p>
             </div>
 
@@ -518,9 +658,13 @@ export default function App() {
               <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200 text-black">
                 <Zap className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold text-black font-display">Staying Ahead</h3>
+              <h3 className="text-lg font-bold text-black font-display">
+                {isSpanish ? "Mantenerse a la Vanguardia" : "Staying Ahead"}
+              </h3>
               <p className="text-gray-500 text-xs leading-relaxed">
-                Because staying ahead starts with education that evolves with you. Upgraded is built upon that precise foundation.
+                {isSpanish 
+                  ? "Porque estar a la vanguardia comienza con una educación que evoluciona contigo. Upgraded se construyó sobre esa premisa." 
+                  : "Because staying ahead starts with education that evolves with you. Upgraded is built upon that precise foundation."}
               </p>
             </div>
           </div>
@@ -529,31 +673,41 @@ export default function App() {
           <div className="bg-black rounded-3xl p-8 sm:p-12 text-white overflow-hidden relative shadow-2xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
               <div className="lg:col-span-5 space-y-4">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400 font-bold">Standard vs Upgraded</span>
-                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">The Future-Proof Distinction</h3>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400 font-bold">
+                  {isSpanish ? "Estándar vs Upgraded" : "Standard vs Upgraded"}
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight font-display">
+                  {isSpanish ? "La Distinción Hacia el Futuro" : "The Future-Proof Distinction"}
+                </h3>
                 <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
-                  Traditional real estate schools optimize for passive compliance and memorization. Upgraded optimizes for professional dominance, tech fluency, and sustainable career compounding.
+                  {isSpanish 
+                    ? "Las escuelas tradicionales se limitan al cumplimiento pasivo y la memorización. Upgraded impulsa tu dominio profesional, fluidez tecnológica y crecimiento sostenible en el negocio."
+                    : "Traditional real estate schools optimize for passive compliance and memorization. Upgraded optimizes for professional dominance, tech fluency, and sustainable career compounding."}
                 </p>
               </div>
 
               <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 space-y-3">
-                  <h4 className="text-[10px] font-mono uppercase tracking-wider text-gray-500 font-bold">Traditional Education</h4>
+                  <h4 className="text-[10px] font-mono uppercase tracking-wider text-gray-500 font-bold">
+                    {isSpanish ? "Educación Tradicional" : "Traditional Education"}
+                  </h4>
                   <ul className="space-y-2 text-xs text-gray-400">
-                    <li className="flex items-center gap-2">✕ Static, outdated PDFs</li>
-                    <li className="flex items-center gap-2">✕ Pure compliance overhead</li>
-                    <li className="flex items-center gap-2">✕ Dry legal lecture format</li>
-                    <li className="flex items-center gap-2">✕ Zero tech/business integration</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✕ PDFs estáticos y desactualizados" : "✕ Static, outdated PDFs"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✕ Sobrecarga de mero cumplimiento" : "✕ Pure compliance overhead"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✕ Formato árido de lectura legal" : "✕ Dry legal lecture format"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✕ Cero integración tecnológica o de negocios" : "✕ Zero tech/business integration"}</li>
                   </ul>
                 </div>
 
                 <div className="bg-neutral-800/40 border border-neutral-700/60 rounded-2xl p-6 space-y-3">
-                  <h4 className="text-[10px] font-mono uppercase tracking-wider text-white font-bold">Upgraded Learning</h4>
+                  <h4 className="text-[10px] font-mono uppercase tracking-wider text-white font-bold">
+                    {isSpanish ? "Aprendizaje Upgraded" : "Upgraded Learning"}
+                  </h4>
                   <ul className="space-y-2 text-xs text-gray-200 font-medium">
-                    <li className="flex items-center gap-2">✓ Beautiful micro-syllabus</li>
-                    <li className="flex items-center gap-2">✓ Career growth integration</li>
-                    <li className="flex items-center gap-2">✓ High exam pass algorithms</li>
-                    <li className="flex items-center gap-2">✓ Specialized AI & marketing playbooks</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✓ Micro-currículo interactivo y visual" : "✓ Beautiful micro-syllabus"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✓ Integración con crecimiento de carrera" : "✓ Career growth integration"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✓ Algoritmos para alto índice de aprobación" : "✓ High exam pass algorithms"}</li>
+                    <li className="flex items-center gap-2">{isSpanish ? "✓ Estrategias prácticas de IA y mercadeo" : "✓ Specialized AI & marketing playbooks"}</li>
                   </ul>
                 </div>
               </div>
@@ -568,13 +722,15 @@ export default function App() {
           {/* Section Header */}
           <div className="text-center max-w-2xl mx-auto space-y-4">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-white px-3.5 py-1 rounded-full border border-gray-200 shadow-sm">
-              Interactive Catalog
+              {isSpanish ? "Catálogo Interactivo" : "Interactive Catalog"}
             </span>
             <h2 className="text-3xl sm:text-5xl font-semibold text-black tracking-tight leading-tight font-display">
-              Explore Your Learning Path
+              {t.learningPaths.title}
             </h2>
             <p className="text-gray-500 text-sm leading-relaxed">
-              Whether you're starting your real estate career, maintaining your license, or investing in your professional development, Upgraded offers learning experiences designed for every stage of your journey.
+              {isSpanish 
+                ? "Ya sea que comiences tu carrera, mantengas tu licencia activa o impulses tu desarrollo profesional, Upgraded te ofrece experiencias de aprendizaje diseñadas para cada etapa de tu camino."
+                : "Whether you're starting your real estate career, maintaining your license, or investing in your professional development, Upgraded offers learning experiences designed for every stage of your journey."}
             </p>
           </div>
 
@@ -644,25 +800,21 @@ export default function App() {
             {/* Brand Slogan */}
             <div className="lg:col-span-4 space-y-5 text-left">
               <div 
-                className="flex items-center gap-1.5 cursor-pointer select-none" 
+                className="flex items-center gap-2 cursor-pointer select-none" 
                 onClick={() => navigateToView('home')}
               >
-                <span className="text-2xl font-black tracking-tight text-white font-sans flex items-center">
-                  Upgr
-                  <span className="inline-block mx-[0.5px] text-white">
-                    <svg className="w-[18px] h-[18px] transform rotate-[-15deg] translate-y-[-1.5px]" viewBox="0 0 100 100" fill="currentColor">
-                      <path d="M50 12 L88 88 L50 68 L12 88 Z" />
-                    </svg>
-                  </span>
-                  ded
-                </span>
+                <img 
+                  src="/Upgraded-White-Logo.png" 
+                  alt="Upgraded Real Estate Academy" 
+                  className="h-8 w-auto object-contain" 
+                />
               </div>
               <div className="space-y-3">
                 <p className="text-sm font-bold text-neutral-200 font-display">
-                  Where Modern Agents Upgrade Themselves.
+                  {t.footer.slogan}
                 </p>
                 <p className="text-xs text-neutral-400 leading-relaxed max-w-sm">
-                  Helping real estate professionals stay ahead in a changing industry.
+                  {t.footer.tagline}
                 </p>
               </div>
             </div>
@@ -670,7 +822,7 @@ export default function App() {
             {/* Navigation Column */}
             <div className="lg:col-span-2 space-y-4 text-left">
               <h4 className="text-white text-[10px] font-mono uppercase tracking-widest font-bold">
-                Navigation
+                {t.footer.navTitle}
               </h4>
               <ul className="space-y-2.5 text-xs">
                 <li>
@@ -678,7 +830,7 @@ export default function App() {
                     onClick={() => navigateToView('home')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'home' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Home
+                    {t.footer.home}
                   </button>
                 </li>
                 <li>
@@ -686,7 +838,7 @@ export default function App() {
                     onClick={() => navigateToView('courses', { courseId: null })}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'courses' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Explore Courses
+                    {t.footer.courses}
                   </button>
                 </li>
                 <li>
@@ -694,7 +846,7 @@ export default function App() {
                     onClick={() => navigateToView('licensing')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'licensing' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Licensing Education
+                    {t.footer.licensing}
                   </button>
                 </li>
                 <li>
@@ -702,7 +854,7 @@ export default function App() {
                     onClick={() => navigateToView('pro_dev')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'pro_dev' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Professional Development
+                    {t.footer.proDev}
                   </button>
                 </li>
                 <li>
@@ -710,7 +862,7 @@ export default function App() {
                     onClick={() => navigateToView('leadership')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'leadership' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Leadership
+                    {t.footer.leadership}
                   </button>
                 </li>
                 <li>
@@ -718,7 +870,7 @@ export default function App() {
                     onClick={() => navigateToView('contact')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'contact' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Contact Us
+                    {t.footer.contact}
                   </button>
                 </li>
                 <li>
@@ -728,7 +880,7 @@ export default function App() {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white transition-colors block"
                   >
-                    Student Login
+                    {t.footer.studentLogin}
                   </a>
                 </li>
                 <li>
@@ -736,7 +888,7 @@ export default function App() {
                     onClick={() => navigateToView('thank_you')}
                     className={`transition-colors cursor-pointer text-left ${activeView === 'thank_you' ? 'text-white font-semibold' : 'text-gray-400 hover:text-white'}`}
                   >
-                    Order Confirmation
+                    {t.footer.orderConfirmation}
                   </button>
                 </li>
               </ul>
@@ -745,12 +897,12 @@ export default function App() {
             {/* Contact Column */}
             <div className="lg:col-span-3 space-y-4 text-left">
               <h4 className="text-white text-[10px] font-mono uppercase tracking-widest font-bold">
-                Contact
+                {t.footer.contactTitle}
               </h4>
               <div className="space-y-3 text-xs">
                 <div className="space-y-1">
                   <p className="text-[10px] font-mono text-neutral-500 uppercase font-bold tracking-wider">
-                    Email
+                    {t.footer.emailLabel}
                   </p>
                   <a 
                     href="mailto:adriana@upgradedreacademy.com" 
@@ -760,7 +912,7 @@ export default function App() {
                   </a>
                 </div>
                 <p className="text-neutral-400 text-[11px] leading-relaxed">
-                  For general inquiries, enrollment assistance, student support, or partnership opportunities, our team is here to help.
+                  {t.footer.contactNote}
                 </p>
               </div>
             </div>
@@ -768,33 +920,23 @@ export default function App() {
             {/* Policies Column */}
             <div className="lg:col-span-3 space-y-4 text-left">
               <h4 className="text-white text-[10px] font-mono uppercase tracking-widest font-bold">
-                Policies
+                {t.footer.policiesTitle}
               </h4>
               <ul className="space-y-2.5 text-xs text-gray-400">
                 {[
-                  "Student Policies",
-                  "Course Purchase & Refund Policy",
-                  "Privacy Policy",
-                  "Terms & Conditions",
-                  "Accessibility Statement",
-                  "Cookie Policy"
+                  { label: isSpanish ? "Políticas Estudiantiles" : "Student Policies", key: "student" as PolicyKey },
+                  { label: isSpanish ? "Política de Compra y Reembolso" : "Course Purchase & Refund Policy", key: "refund" as PolicyKey },
+                  { label: isSpanish ? "Política de Privacidad" : "Privacy Policy", key: "privacy" as PolicyKey },
+                  { label: isSpanish ? "Términos y Condiciones" : "Terms & Conditions", key: "terms" as PolicyKey },
+                  { label: isSpanish ? "Declaración de Accesibilidad" : "Accessibility Statement", key: "accessibility" as PolicyKey },
+                  { label: isSpanish ? "Política de Cookies" : "Cookie Policy", key: "cookie" as PolicyKey }
                 ].map((policy) => (
-                  <li key={policy}>
+                  <li key={policy.key}>
                     <button
-                      onClick={() => {
-                        let key: PolicyKey = "terms";
-                        if (policy === "Student Policies") key = "student";
-                        else if (policy === "Course Purchase & Refund Policy") key = "refund";
-                        else if (policy === "Privacy Policy") key = "privacy";
-                        else if (policy === "Terms & Conditions") key = "terms";
-                        else if (policy === "Accessibility Statement") key = "accessibility";
-                        else if (policy === "Cookie Policy") key = "cookie";
-                        
-                        navigateToView('policy', { policyKey: key });
-                      }}
+                      onClick={() => navigateToView('policy', { policyKey: policy.key })}
                       className="hover:text-white transition-colors cursor-pointer text-left"
                     >
-                      {policy}
+                      {policy.label}
                     </button>
                   </li>
                 ))}
@@ -807,41 +949,33 @@ export default function App() {
           <div className="border-t border-neutral-900 pt-10 grid grid-cols-1 md:grid-cols-12 gap-8 text-left">
             <div className="md:col-span-5 space-y-3">
               <h4 className="text-white text-[10px] font-mono uppercase tracking-widest font-bold">
-                School Information
+                {t.footer.schoolInfoTitle}
               </h4>
               <div className="space-y-1">
                 <p className="text-sm font-bold text-white font-display">
-                  Upgraded Real Estate School
+                  {t.footer.schoolName}
                 </p>
                 <p className="text-xs text-neutral-300 font-medium">
-                  Licensed Florida Real Estate School
+                  {t.footer.schoolType}
                 </p>
                 <p className="text-[10px] font-mono text-neutral-500 font-bold tracking-wide">
-                  Florida School License #ZH1002624
+                  {t.footer.licenseNumber}
                 </p>
               </div>
             </div>
 
             <div className="md:col-span-7 text-[11px] leading-relaxed text-neutral-500 space-y-3 max-w-2xl font-sans">
-              <p>
-                Licensed education is provided by <strong className="text-neutral-400">Upgraded Real Estate School</strong>. Enrollment and payment processing are managed by <strong className="text-neutral-400">Upgraded Real Estate Academy, LLC</strong>.
-              </p>
-              <p>
-                Upgraded Real Estate Academy provides online real estate education. Course approval status, credit eligibility, and applicable licensing requirements are determined by the Florida Department of Business and Professional Regulation (DBPR).
-              </p>
-              <p>
-                Prospective students are encouraged to verify that the selected course meets their individual licensing requirements before enrolling. All educational programs are delivered online unless otherwise stated. No in-person instruction is provided.
-              </p>
+              <p>{t.footer.disclaimer1}</p>
+              <p>{t.footer.disclaimer2}</p>
+              <p>{t.footer.disclaimer3}</p>
             </div>
           </div>
 
           {/* Copyright & Maker Credits */}
           <div className="border-t border-neutral-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-neutral-600">
-            <p>
-              © 2026 Upgraded Real Estate Academy, LLC. All Rights Reserved.
-            </p>
+            <p>{t.footer.copyright}</p>
             <p className="flex items-center gap-1">
-              <span>Designed & Developed by</span>
+              <span>{t.footer.designedBy}</span>
               <a 
                 href="https://marketingverse.com" 
                 target="_blank" 

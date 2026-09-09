@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Bell } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface GHLWaitingListModalProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface GHLWaitingListModalProps {
 }
 
 export default function GHLWaitingListModal({ isOpen, onClose, courseTitle }: GHLWaitingListModalProps) {
+  const { isSpanish } = useLanguage();
+
   useEffect(() => {
     if (isOpen) {
       const scriptId = "ghl-form-embed-script";
@@ -45,14 +48,15 @@ export default function GHLWaitingListModal({ isOpen, onClose, courseTitle }: GH
               <div className="space-y-1.5 pr-8 text-left">
                 <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono font-bold uppercase tracking-wider">
                   <Bell className="w-3 h-3 text-emerald-400" />
-                  Course Waiting List
+                  {isSpanish ? "Lista de Espera del Curso" : "Course Waiting List"}
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-                  Get Notified When Enrollment Opens
+                  {isSpanish ? "Recibe una Notificación al Abrir Inscripciones" : "Get Notified When Enrollment Opens"}
                 </h3>
                 {courseTitle && (
                   <p className="text-xs text-gray-300 line-clamp-1">
-                    Course: <strong className="text-emerald-400 font-semibold">{courseTitle}</strong>
+                    {isSpanish ? "Curso:" : "Course:"}{" "}
+                    <strong className="text-emerald-400 font-semibold">{courseTitle}</strong>
                   </p>
                 )}
               </div>

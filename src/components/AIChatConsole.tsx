@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, Mic, MicOff, Volume2, VolumeX, Sparkles, X, RotateCcw, Bot, User, CornerDownLeft } from "lucide-react";
 import { Message } from "../types";
+import { useLanguage } from "../context/LanguageContext";
 
 // Setup Speech Recognition types for TypeScript
 interface SpeechRecognitionEvent {
@@ -33,14 +34,18 @@ interface WebkitWindow extends Window {
 }
 
 export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: () => void; initialPrompt?: string }) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "model",
-      content: "Hello! I am Upgraded AI, your modern real estate education assistant. Ask me anything about our Florida licensing programs, professional development, or the real estate industry in general.",
-      timestamp: new Date()
-    }
-  ]);
+  const { isSpanish } = useLanguage();
+
+  const getInitialWelcome = () => ({
+    id: "welcome",
+    role: "model" as const,
+    content: isSpanish
+      ? "¡Hola! Soy Upgraded AI, tu asistente de educación inmobiliaria moderna. Pregúntame lo que desees sobre nuestros programas de licencias en Florida, desarrollo profesional o la industria inmobiliaria en general."
+      : "Hello! I am Upgraded AI, your modern real estate education assistant. Ask me anything about our Florida licensing programs, professional development, or the real estate industry in general.",
+    timestamp: new Date()
+  });
+
+  const [messages, setMessages] = useState<Message[]>([getInitialWelcome()]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
@@ -51,12 +56,21 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
   const sentInitialPromptsRef = useRef<Set<string>>(new Set());
 
   // Suggestions for quick prompting
-  const suggestions = [
+  const suggestionsEn = [
     "Tell me about the 63-Hour pre-license",
     "How does Upgraded AI course work?",
     "Florida CE renewal requirements",
     "Real estate marketing trends"
   ];
+
+  const suggestionsEs = [
+    "Háblame de la Pre-Licencia de 63 Horas",
+    "¿Cómo funciona el curso de IA Inmobiliaria?",
+    "Requisitos de renovación CE en Florida",
+    "Tendencias de marketing inmobiliario"
+  ];
+
+  const suggestions = isSpanish ? suggestionsEs : suggestionsEn;
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -67,7 +81,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
       const rec = new SpeechRec();
       rec.continuous = false;
       rec.interimResults = false;
-      rec.lang = "en-US";
+      rec.lang = isSpanish ? "es-ES" : "en-US";
 
       rec.onstart = () => {
         setIsRecording(true);
@@ -92,7 +106,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
 
       setRecognition(rec);
     }
-  }, []);
+  }, [isSpanish]);
 
   // Auto trigger initial prompt when modal opens
   useEffect(() => {
@@ -117,11 +131,12 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
     const cleanText = text.replace(/[*_#`\-]/g, ""); // Clean markdown characters
     const utterance = new SpeechSynthesisUtterance(cleanText);
     
-    // Find a premium-sounding voice if possible
+    // Find voice matching language
     const voices = window.speechSynthesis.getVoices();
-    const premiumVoice = voices.find(v => v.name.includes("Google") || v.name.includes("Natural") || v.lang.startsWith("en"));
-    if (premiumVoice) {
-      utterance.voice = premiumVoice;
+    const targetLang = isSpanish ? "es" : "en";
+    const voice = voices.find(v => v.lang.startsWith(targetLang) && (v.name.includes("Google") || v.name.includes("Natural"))) || voices.find(v => v.lang.startsWith(targetLang));
+    if (voice) {
+      utterance.voice = voice;
     }
     
     utterance.rate = 1.05;
@@ -173,7 +188,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
         // Trigger speech if unmuted
         speakResponse(data.content);
       } else {
-        throw new Error(data.error || "Failed to generate response.");
+        throw new Error(data.error || (isSpanish ? "Error al generar la respuesta." : "Failed to generate response."));
       }
     } catch (err: any) {
       console.error("Chat error:", err);
@@ -182,7 +197,9 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
         {
           id: Math.random().toString(),
           role: "model",
-          content: `Connection issue: ${err.message || "I had trouble connecting to my servers. Please try again."}`,
+          content: isSpanish 
+            ? `Problema de conexión: ${err.message || "Tuve problemas para conectarme a los servidores. Por favor, intenta de nuevo."}`
+            : `Connection issue: ${err.message || "I had trouble connecting to my servers. Please try again."}`,
           timestamp: new Date()
         }
       ]);
@@ -193,7 +210,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
 
   const toggleRecording = () => {
     if (!recognition) {
-      alert("Speech recognition is not supported on your browser. Try using Google Chrome.");
+      alert(isSpanish ? "El reconocimiento de voz no está soportado en este navegador. Te sugerimos usar Google Chrome." : "Speech recognition is not supported on your browser. Try using Google Chrome.");
       return;
     }
 
@@ -207,18 +224,11 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
 
   const resetChat = () => {
     window.speechSynthesis.cancel();
-    setMessages([
-      {
-        id: "welcome",
-        role: "model",
-        content: "Hello! I am Upgraded AI, your modern real estate education assistant. Ask me anything about our Florida licensing programs, professional development, or the real estate industry in general.",
-        timestamp: new Date()
-      }
-    ]);
+    setMessages([getInitialWelcome()]);
   };
 
   return (
-    <div id="ai-chat-console" className="flex flex-col h-[520px] bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-xl relative">
+    <div id="ai-chat-console" className="flex flex-col h-[520px] bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-xl relative text-left">
       {/* Console Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/60">
         <div className="flex items-center gap-3">
@@ -227,7 +237,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
           </div>
           <div>
             <h4 className="text-xs font-bold text-black uppercase tracking-wider flex items-center gap-1.5 font-display">
-              Upgraded AI Assistant
+              {isSpanish ? "Asistente Upgraded IA" : "Upgraded AI Assistant"}
               <span className="w-1.5 h-1.5 bg-black rounded-full" />
             </h4>
             <p className="text-[9px] text-gray-450 font-mono">MODEL: GEMINI-3.5-FLASH</p>
@@ -241,7 +251,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
               setIsMuted(!isMuted);
               if (!isMuted) window.speechSynthesis.cancel();
             }}
-            title={isMuted ? "Unmute Voice" : "Mute Voice"}
+            title={isMuted ? (isSpanish ? "Activar Voz" : "Unmute Voice") : (isSpanish ? "Silenciar Voz" : "Mute Voice")}
             className={`p-2 rounded-lg border transition-all ${
               isMuted 
                 ? "border-gray-200 text-gray-400 hover:text-black hover:bg-gray-50" 
@@ -254,7 +264,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
           {/* Reset button */}
           <button
             onClick={resetChat}
-            title="Reset Chat"
+            title={isSpanish ? "Reiniciar Chat" : "Reset Chat"}
             className="p-2 border border-gray-200 text-gray-400 hover:text-black hover:bg-gray-50 rounded-lg transition-all"
           >
             <RotateCcw className="w-4 h-4" />
@@ -279,7 +289,9 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
             </span>
-            <span className="text-xs font-mono text-black font-semibold">Listening to user voice...</span>
+            <span className="text-xs font-mono text-black font-semibold">
+              {isSpanish ? "Escuchando voz del usuario..." : "Listening to user voice..."}
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <span className="w-1 h-3 bg-black rounded-full animate-pulse" />
@@ -324,7 +336,9 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
                 <Bot className="w-4 h-4" />
               </div>
               <div className="rounded-2xl p-4 bg-gray-50 border border-gray-100 text-gray-500 flex items-center gap-2">
-                <span className="text-[11px] font-mono">Generating clarity</span>
+                <span className="text-[11px] font-mono">
+                  {isSpanish ? "Generando respuesta" : "Generating clarity"}
+                </span>
                 <span className="flex gap-1">
                   <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:0s]" />
                   <span className="w-1.5 h-1.5 bg-black rounded-full animate-bounce [animation-delay:0.15s]" />
@@ -340,13 +354,15 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
       {/* Suggested Prompts Grid */}
       {messages.length === 1 && !isLoading && (
         <div className="px-6 py-3 bg-gray-50/50 border-t border-gray-100">
-          <p className="text-[9px] uppercase font-mono text-gray-400 tracking-wider mb-2 font-bold">Suggested Inquiries</p>
+          <p className="text-[9px] uppercase font-mono text-gray-400 tracking-wider mb-2 font-bold">
+            {isSpanish ? "Consultas Sugeridas" : "Suggested Inquiries"}
+          </p>
           <div className="grid grid-cols-2 gap-2">
             {suggestions.map((s) => (
               <button
                 key={s}
                 onClick={() => handleSendMessage(s)}
-                className="text-left text-xs bg-white hover:bg-gray-50 text-gray-600 hover:text-black px-3 py-2 rounded-xl border border-gray-200 transition-all truncate font-medium"
+                className="text-left text-xs bg-white hover:bg-gray-50 text-gray-600 hover:text-black px-3 py-2 rounded-xl border border-gray-200 transition-all truncate font-medium cursor-pointer"
               >
                 {s}
               </button>
@@ -366,7 +382,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
                 ? "bg-red-500 text-white shadow" 
                 : "text-gray-400 hover:text-black hover:bg-gray-50"
             }`}
-            title="Speech Input (Voice Chat)"
+            title={isSpanish ? "Entrada por voz" : "Speech Input (Voice Chat)"}
           >
             {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
@@ -381,7 +397,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
                 handleSendMessage();
               }
             }}
-            placeholder={isRecording ? "Listening..." : "Ask Upgraded AI..."}
+            placeholder={isRecording ? (isSpanish ? "Escuchando..." : "Listening...") : (isSpanish ? "Pregunta a Upgraded IA..." : "Ask Upgraded AI...")}
             className="flex-1 bg-transparent border-0 text-black placeholder-gray-400 focus:ring-0 focus:outline-none text-xs px-2"
             disabled={isLoading || isRecording}
           />
@@ -392,7 +408,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
             disabled={isLoading || !input.trim()}
             className={`p-2 rounded-lg transition-all ${
               input.trim() && !isLoading
-                ? "bg-black text-white hover:bg-neutral-900"
+                ? "bg-black text-white hover:bg-neutral-900 cursor-pointer"
                 : "text-gray-300 cursor-not-allowed"
             }`}
           >
@@ -400,9 +416,9 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
           </button>
         </div>
         <div className="flex items-center justify-between px-2 text-[9px] text-gray-400 font-mono">
-          <span>{isMuted ? "TTS: Muted" : "TTS: Active (Speaking response)"}</span>
+          <span>{isMuted ? (isSpanish ? "Voz: Silenciada" : "TTS: Muted") : (isSpanish ? "Voz: Activa" : "TTS: Active (Speaking response)")}</span>
           <span className="flex items-center gap-1 font-semibold">
-            Press Enter to Send <CornerDownLeft className="w-2.5 h-2.5" />
+            {isSpanish ? "Presiona Enter para Enviar" : "Press Enter to Send"} <CornerDownLeft className="w-2.5 h-2.5" />
           </span>
         </div>
       </div>

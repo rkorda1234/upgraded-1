@@ -1,7 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown, ArrowRight, ShieldCheck, Sparkles, Compass, GraduationCap, Users } from "lucide-react";
+import { 
+  ChevronDown, 
+  ArrowRight, 
+  Sparkles, 
+  GraduationCap, 
+  Compass, 
+  ShieldCheck, 
+  Users 
+} from "lucide-react";
 import { UpgradeOption, UpgradeOptionDetail } from "../types";
+import { useLanguage } from "../context/LanguageContext";
+import { UI_TRANSLATIONS } from "../i18n/translations";
 
 interface DynamicUpgradeTerminalProps {
   onOpenChat: (initialPrompt?: string) => void;
@@ -14,6 +24,7 @@ export default function DynamicUpgradeTerminal({
   onScrollToEducation,
   onScrollToApproach,
 }: DynamicUpgradeTerminalProps) {
+  const { language, isSpanish } = useLanguage();
   const [selectedOption, setSelectedOption] = useState<UpgradeOption>("programs");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -30,41 +41,43 @@ export default function DynamicUpgradeTerminal({
     };
   }, []);
 
+  const tTerm = UI_TRANSLATIONS[language].terminal;
+
   const options: UpgradeOptionDetail[] = [
     {
       id: "programs",
-      label: "Our Educational Mission",
-      title: "Helping real estate professionals stay ahead in a changing industry.",
-      description: "Upgraded combines Florida licensing education with modern professional development to help professionals adapt, grow, and lead throughout every stage of their careers.",
-      badge: "Education"
+      label: tTerm.missionLabel,
+      title: tTerm.missionTitle,
+      description: tTerm.missionDesc,
+      badge: tTerm.missionBadge
     },
     {
       id: "ai_help",
-      label: "AI help for next step",
-      title: "Interactive AI Career Strategist",
-      description: "Get personalized guidance. Our integrated intelligence maps your current credentials to the fastest path forward.",
-      badge: "Instant Assistance"
+      label: tTerm.aiLabel,
+      title: tTerm.aiTitle,
+      description: tTerm.aiDesc,
+      badge: tTerm.aiBadge
     },
     {
       id: "jump_start",
-      label: "Jump Start education",
-      title: "New Agent Launchpad",
-      description: "Begin your Florida real estate career from scratch. High-pass-rate syllabus with adaptive learning schedules.",
-      badge: "63-Hour Track"
+      label: tTerm.jumpStartLabel,
+      title: tTerm.jumpStartTitle,
+      description: tTerm.jumpStartDesc,
+      badge: tTerm.jumpStartBadge
     },
     {
       id: "renew_license",
-      label: "Renew License",
-      title: "Fast-Track 14-Hour Renewal",
-      description: "Stay compliant with state mandates. Keep your active status without the typical classroom friction.",
-      badge: "State Approved"
+      label: tTerm.renewLabel,
+      title: tTerm.renewTitle,
+      description: tTerm.renewDesc,
+      badge: tTerm.renewBadge
     },
     {
       id: "leadership",
-      label: "Meet leadership",
-      title: "The Minds Behind Upgraded",
-      description: "We are educators, technologists, and veteran industry strategists rewriting the standard for real estate success.",
-      badge: "Founders"
+      label: tTerm.leadershipLabel,
+      title: tTerm.leadershipTitle,
+      description: tTerm.leadershipDesc,
+      badge: tTerm.leadershipBadge
     }
   ];
 
@@ -80,7 +93,7 @@ export default function DynamicUpgradeTerminal({
       {/* Selector Dropdown Container */}
       <div ref={dropdownRef} className="relative z-20 flex flex-col items-center">
         <span className="text-[10px] uppercase tracking-widest text-gray-400 font-mono mb-2 font-semibold">
-          how would you like to start?
+          {UI_TRANSLATIONS[language].hero.howToStart}
         </span>
         
         <button
@@ -182,7 +195,7 @@ export default function DynamicUpgradeTerminal({
                   <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-black font-sans">
                     {activeDetail.title}
                   </h3>
-                  <p className="text-gray-500 text-sm leading-relaxed max-w-xl">
+                  <p className={`text-gray-500 text-sm leading-relaxed max-w-xl ${isSpanish ? "[text-wrap:balance]" : ""}`}>
                     {activeDetail.description}
                   </p>
 
@@ -193,24 +206,24 @@ export default function DynamicUpgradeTerminal({
                           onClick={onScrollToEducation}
                           className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-semibold text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm cursor-pointer"
                         >
-                          Explore Learning Paths
+                          {isSpanish ? "Explorar Rutas de Aprendizaje" : "Explore Learning Paths"}
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={onScrollToApproach}
                           className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-full font-semibold text-xs hover:bg-gray-50 hover:text-black hover:border-black transition-all duration-300 cursor-pointer"
                         >
-                          Learn More
+                          {isSpanish ? "Conocer Más" : "Learn More"}
                         </button>
                       </>
                     )}
 
                     {selectedOption === "ai_help" && (
                       <button
-                        onClick={() => onOpenChat("What are the best real estate learning paths for a beginner?")}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm"
+                        onClick={() => onOpenChat(isSpanish ? "¿Cuáles son las mejores rutas de aprendizaje inmobiliario para principiantes?" : "What are the best real estate learning paths for a beginner?")}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm cursor-pointer"
                       >
-                        Launch AI Advisor
+                        {isSpanish ? "Iniciar Asesor IA" : "Launch AI Advisor"}
                         <Sparkles className="w-3.5 h-3.5" />
                       </button>
                     )}
@@ -218,9 +231,9 @@ export default function DynamicUpgradeTerminal({
                     {selectedOption === "jump_start" && (
                       <button
                         onClick={onScrollToEducation}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm cursor-pointer"
                       >
-                        Pre-License Details
+                        {isSpanish ? "Detalles de Pre-Licencia" : "Pre-License Details"}
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
@@ -228,9 +241,9 @@ export default function DynamicUpgradeTerminal({
                     {selectedOption === "renew_license" && (
                       <button
                         onClick={onScrollToEducation}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full font-medium text-xs hover:bg-neutral-900 transition-all duration-300 shadow-sm cursor-pointer"
                       >
-                        Renew Checklist
+                        {isSpanish ? "Lista de Renovación" : "Renew Checklist"}
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
@@ -251,7 +264,9 @@ export default function DynamicUpgradeTerminal({
                             referrerPolicy="no-referrer"
                           />
                         </div>
-                        <span className="text-[10px] text-gray-400 font-mono uppercase">Expert Florida Real Estate Strategists</span>
+                        <span className="text-[10px] text-gray-400 font-mono uppercase">
+                          {isSpanish ? "Estrategas Expertos en Bienes Raíces de Florida" : "Expert Florida Real Estate Strategists"}
+                        </span>
                       </div>
                     )}
                   </div>

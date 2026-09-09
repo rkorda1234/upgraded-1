@@ -4,6 +4,9 @@ import {
   COURSES, 
   Course 
 } from "../data/courses";
+import { COURSES_ES_ARRAY } from "../data/coursesSpanish";
+import { useLanguage } from "../context/LanguageContext";
+import { UI_TRANSLATIONS } from "../i18n/translations";
 import GHLWaitingListModal from "./GHLWaitingListModal";
 import { 
   BookOpen, 
@@ -43,6 +46,9 @@ export default function ExploreCoursesView({
   onOpenChatWithPrompt,
   onBackToHome 
 }: ExploreCoursesViewProps) {
+  const { language, isSpanish } = useLanguage();
+  const currentCourses = isSpanish ? COURSES_ES_ARRAY : COURSES;
+
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -54,7 +60,7 @@ export default function ExploreCoursesView({
   // Sync initialCourseId and initialCategory if passed
   useEffect(() => {
     if (initialCourseId) {
-      const found = COURSES.find(c => c.id === initialCourseId || c.slug === initialCourseId);
+      const found = currentCourses.find(c => c.id === initialCourseId || c.slug === initialCourseId);
       if (found) {
         setSelectedCourse(found);
       }
@@ -65,16 +71,35 @@ export default function ExploreCoursesView({
     if (initialCategory) {
       setSelectedCategory(initialCategory);
     }
-  }, [initialCourseId, initialCategory]);
+  }, [initialCourseId, initialCategory, currentCourses]);
+
+  // Keep selectedCourse in sync when switching languages
+  useEffect(() => {
+    if (selectedCourse) {
+      const matching = currentCourses.find(c => c.id === selectedCourse.id);
+      if (matching) {
+        setSelectedCourse(matching);
+      }
+    }
+  }, [language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [selectedCourse]);
 
-  const categories = ["All", "Continuing Education", "Licensing Education", "Professional Development"];
+  const categories = isSpanish
+    ? ["Todos", "Educación Continua", "Educación para Licencias", "Desarrollo Profesional"]
+    : ["All", "Continuing Education", "Licensing Education", "Professional Development"];
 
-  const filteredCourses = COURSES.filter(course => {
-    const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
+  const filteredCourses = currentCourses.filter(course => {
+    let matchesCategory = true;
+    if (selectedCategory !== "All" && selectedCategory !== "Todos") {
+      let targetCat: string = selectedCategory;
+      if (selectedCategory === "Educación Continua") targetCat = "Continuing Education";
+      else if (selectedCategory === "Educación para Licencias") targetCat = "Licensing Education";
+      else if (selectedCategory === "Desarrollo Profesional") targetCat = "Professional Development";
+      matchesCategory = course.category === targetCat;
+    }
     const matchesSearch = 
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.headline.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -113,14 +138,16 @@ export default function ExploreCoursesView({
             className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-gray-500 hover:text-black transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            {selectedCourse ? "Back to Course Catalog" : "Back to Home"}
+            {selectedCourse 
+              ? (isSpanish ? "Volver al Catálogo de Cursos" : "Back to Course Catalog") 
+              : (isSpanish ? "Volver al Inicio" : "Back to Home")}
           </button>
 
           <div className="flex items-center gap-3 text-xs font-mono text-gray-400 font-medium">
             <span>UPGRADED REAL ESTATE ACADEMY</span>
             <span>/</span>
             <span className="text-black font-semibold">
-              {selectedCourse ? selectedCourse.category : "COURSE CATALOG"}
+              {selectedCourse ? selectedCourse.category : (isSpanish ? "CATÁLOGO DE CURSOS" : "COURSE CATALOG")}
             </span>
           </div>
         </div>
@@ -192,24 +219,30 @@ export default function ExploreCoursesView({
                   {/* Highlights Bar */}
                   <div className="pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs font-medium text-gray-600">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">Access Period</span>
+                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">
+                        {isSpanish ? "Período de Acceso" : "Access Period"}
+                      </span>
                       <p className="text-black font-semibold flex items-center gap-1.5">
                         <Lock className="w-3.5 h-3.5 text-gray-400" />
                         {selectedCourse.accessPeriod}
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">Languages</span>
+                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">
+                        {isSpanish ? "Idiomas" : "Languages"}
+                      </span>
                       <p className="text-black font-semibold flex items-center gap-1.5">
                         <Globe className="w-3.5 h-3.5 text-gray-400" />
                         {selectedCourse.language}
                       </p>
                     </div>
                     <div className="space-y-1 col-span-2 sm:col-span-1">
-                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">Delivery Format</span>
+                      <span className="text-[10px] font-mono font-bold uppercase text-gray-400 block">
+                        {isSpanish ? "Modalidad de Entrega" : "Delivery Format"}
+                      </span>
                       <p className="text-black font-semibold flex items-center gap-1.5">
                         <Zap className="w-3.5 h-3.5 text-amber-500" />
-                        100% Online Self-Paced
+                        {isSpanish ? "100% En Línea a tu Ritmo" : "100% Online Self-Paced"}
                       </p>
                     </div>
                   </div>
@@ -220,7 +253,7 @@ export default function ExploreCoursesView({
                 <div className="lg:col-span-4 bg-gray-50/80 border border-gray-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
                   <div className="space-y-2 border-b border-gray-200 pb-5">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-400 block">
-                      Enrollment Fee
+                      {isSpanish ? "Tarifa de Inscripción" : "Enrollment Fee"}
                     </span>
                     <div className="flex items-baseline gap-3">
                       <span className="text-4xl sm:text-5xl font-black text-black font-display tracking-tight">
@@ -234,7 +267,7 @@ export default function ExploreCoursesView({
                     </div>
                     <p className={`text-xs ${isProDev ? "text-blue-700" : "text-emerald-700"} font-semibold flex items-center gap-1`}>
                       <Check className={`w-3.5 h-3.5 ${isProDev ? "text-blue-600" : "text-emerald-600"}`} />
-                      Instant HighLevel Student Access Included
+                      {isSpanish ? "Acceso Inmediato en HighLevel Incluido" : "Instant HighLevel Student Access Included"}
                     </p>
                   </div>
 
@@ -242,10 +275,12 @@ export default function ExploreCoursesView({
                   {selectedCourse.isLive && selectedCourse.languageCheckouts && selectedCourse.languageCheckouts.length > 0 ? (
                     <div className="space-y-3">
                       <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-500 block text-center">
-                        Choose Your Preferred Language
+                        {isSpanish ? "Elige Tu Idioma Preferido" : "Choose Your Preferred Language"}
                       </span>
                       <p className="text-[11px] text-gray-500 text-center leading-snug">
-                        Both courses provide the same curriculum and satisfy the same Professional Development learning objectives.
+                        {isSpanish 
+                          ? "Ambos cursos ofrecen el mismo currículo y satisfacen los mismos objetivos de Desarrollo Profesional."
+                          : "Both courses provide the same curriculum and satisfy the same Professional Development learning objectives."}
                       </p>
                       <div className="grid grid-cols-1 gap-2.5 pt-1">
                         {selectedCourse.languageCheckouts.map((lang, idx) => (
@@ -267,7 +302,9 @@ export default function ExploreCoursesView({
                         ))}
                       </div>
                       <p className="text-[11px] text-gray-500 text-center leading-snug pt-1">
-                        Need Help Choosing the Right Course? Request Your Upgraded Renewal Review™ below.
+                        {isSpanish
+                          ? "¿Necesitas ayuda para elegir el curso correcto? Solicita tu Upgraded Renewal Review™ abajo."
+                          : "Need Help Choosing the Right Course? Request Your Upgraded Renewal Review™ below."}
                       </p>
                     </div>
                   ) : selectedCourse.isLive && selectedCourse.checkoutUrl ? (
@@ -278,11 +315,13 @@ export default function ExploreCoursesView({
                         rel="noopener noreferrer"
                         className="w-full bg-black hover:bg-neutral-900 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm uppercase tracking-wider group cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        <span>Enroll & Buy Course Now</span>
+                        <span>{isSpanish ? "Inscribirme y Comprar Curso Ahora" : "Enroll & Buy Course Now"}</span>
                         <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </a>
                       <p className="text-[11px] text-gray-500 text-center leading-snug">
-                        Secure 256-bit checkout powered by HighLevel. Access details emailed instantly upon completion.
+                        {isSpanish
+                          ? "Pago seguro de 256 bits procesado por HighLevel. Los datos de acceso se envían inmediatamente por correo."
+                          : "Secure 256-bit checkout powered by HighLevel. Access details emailed instantly upon completion."}
                       </p>
                     </div>
                   ) : (
@@ -292,10 +331,12 @@ export default function ExploreCoursesView({
                         className="w-full bg-black hover:bg-neutral-900 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01]"
                       >
                         <Mail className={`w-4 h-4 ${isProDev ? "text-blue-400" : "text-emerald-400"}`} />
-                        <span>Notify Me When Available</span>
+                        <span>{isSpanish ? "Avisarme Cuando Esté Disponible" : "Notify Me When Available"}</span>
                       </button>
                       <p className={`text-[11px] ${isProDev ? "text-blue-900 bg-blue-50 border-blue-200/60" : "text-emerald-900 bg-emerald-50 border-emerald-200/60"} border p-2.5 rounded-lg text-center font-medium`}>
-                        This course is currently in development. Click above to be notified as soon as enrollment opens.
+                        {isSpanish
+                          ? "Este curso está actualmente en desarrollo. Haz clic arriba para recibir un aviso tan pronto abran las inscripciones."
+                          : "This course is currently in development. Click above to be notified as soon as enrollment opens."}
                       </p>
                     </div>
                   )}
@@ -303,20 +344,20 @@ export default function ExploreCoursesView({
                   {/* Flow checklist */}
                   <div className="space-y-2 pt-2 border-t border-gray-200">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-400 block">
-                      Enrollment Flow
+                      {isSpanish ? "Proceso de Inscripción" : "Enrollment Flow"}
                     </span>
                     <ol className="space-y-2 text-xs text-gray-600 font-medium">
                       <li className="flex items-start gap-2">
                         <span className="w-4 h-4 rounded-full bg-black text-white text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-                        <span>Click Enroll to proceed to HighLevel Checkout.</span>
+                        <span>{isSpanish ? "Haz clic en Inscribirme para ir al pago seguro en HighLevel." : "Click Enroll to proceed to HighLevel Checkout."}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="w-4 h-4 rounded-full bg-black text-white text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-                        <span>Complete secure payment & receive login credentials.</span>
+                        <span>{isSpanish ? "Completa el pago seguro y recibe tus credenciales de acceso." : "Complete secure payment & receive login credentials."}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="w-4 h-4 rounded-full bg-black text-white text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-                        <span>Start coursework immediately in your Student Portal.</span>
+                        <span>{isSpanish ? "Comienza tu curso de inmediato en tu Portal de Estudiante." : "Start coursework immediately in your Student Portal."}</span>
                       </li>
                     </ol>
                   </div>
@@ -324,11 +365,11 @@ export default function ExploreCoursesView({
                   {/* Ask AI Advisor button */}
                   {onOpenChatWithPrompt && (
                     <button
-                      onClick={() => onOpenChatWithPrompt(`I have questions about the "${selectedCourse.title}" course before enrolling.`)}
+                      onClick={() => onOpenChatWithPrompt(isSpanish ? `Tengo preguntas sobre el curso "${selectedCourse.title}" antes de inscribirme.` : `I have questions about the "${selectedCourse.title}" course before enrolling.`)}
                       className="w-full bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 font-semibold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-black" />
-                      <span>Ask AI Advisor About This Course</span>
+                      <span>{isSpanish ? "Preguntar al Asesor IA Sobre Este Curso" : "Ask AI Advisor About This Course"}</span>
                     </button>
                   )}
 
@@ -658,27 +699,31 @@ export default function ExploreCoursesView({
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-black font-display">Provider Details</h3>
+                      <h3 className="text-xs font-bold text-black font-display">
+                        {isSpanish ? "Detalles del Proveedor" : "Provider Details"}
+                      </h3>
                       <p className="text-[11px] text-gray-500">Upgraded Real Estate Academy LLC</p>
                     </div>
                   </div>
                   <div className="space-y-2 text-xs text-gray-600 border-t border-gray-100 pt-3">
                     <div className="flex justify-between py-1 border-b border-gray-50">
-                      <span className="text-gray-400">Regulatory Body:</span>
+                      <span className="text-gray-400">{isSpanish ? "Organismo Regulador:" : "Regulatory Body:"}</span>
                       <span className="font-semibold text-black">Florida DBPR</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-50">
-                      <span className="text-gray-400">Course Format:</span>
-                      <span className="font-semibold text-black">Online Self-Paced</span>
+                      <span className="text-gray-400">{isSpanish ? "Formato del Curso:" : "Course Format:"}</span>
+                      <span className="font-semibold text-black">{isSpanish ? "En Línea a tu Ritmo" : "Online Self-Paced"}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-gray-50">
-                      <span className="text-gray-400">Credit Submission:</span>
+                      <span className="text-gray-400">{isSpanish ? "Envío de Créditos:" : "Credit Submission:"}</span>
                       <span className={`font-semibold ${isProDev ? "text-blue-700" : "text-emerald-700"}`}>
-                        {isProDev ? "Self-Paced Certificate" : "Automated Direct"}
+                        {isProDev 
+                          ? (isSpanish ? "Certificado Autoguiado" : "Self-Paced Certificate") 
+                          : (isSpanish ? "Automático Directo al DBPR" : "Automated Direct")}
                       </span>
                     </div>
                     <div className="flex justify-between py-1">
-                      <span className="text-gray-400">Support Email:</span>
+                      <span className="text-gray-400">{isSpanish ? "Correo de Soporte:" : "Support Email:"}</span>
                       <span className="font-semibold text-black">adriana@upgradedreacademy.com</span>
                     </div>
                   </div>
@@ -688,13 +733,15 @@ export default function ExploreCoursesView({
                 {selectedCourse.isLive && selectedCourse.checkoutUrl && (
                   <div className="bg-black text-white rounded-2xl p-6 space-y-4 shadow-lg text-center">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400 font-bold block">
-                      Ready To Renew or Start?
+                      {isSpanish ? "¿Listo para Renovar o Empezar?" : "Ready To Renew or Start?"}
                     </span>
                     <h3 className="text-lg font-bold font-display">
-                      {selectedCourse.price} Full Access
+                      {selectedCourse.price} {isSpanish ? "Acceso Completo" : "Full Access"}
                     </h3>
                     <p className="text-xs text-gray-300 leading-relaxed">
-                      Enroll now to complete your course on your own schedule with direct Florida DBPR credit reporting.
+                      {isSpanish
+                        ? "Inscríbete ahora para completar tu curso a tu propio ritmo con reporte directo de créditos al DBPR de Florida."
+                        : "Enroll now to complete your course on your own schedule with direct Florida DBPR credit reporting."}
                     </p>
                     <a
                       href={selectedCourse.checkoutUrl}
@@ -702,7 +749,7 @@ export default function ExploreCoursesView({
                       rel="noopener noreferrer"
                       className="w-full bg-white text-black hover:bg-gray-100 font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer"
                     >
-                      <span>Proceed to HighLevel Checkout</span>
+                      <span>{isSpanish ? "Ir al Pago Seguro en HighLevel" : "Proceed to HighLevel Checkout"}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
@@ -722,13 +769,15 @@ export default function ExploreCoursesView({
               <div className="max-w-3xl space-y-4 relative z-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 border border-gray-200 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider text-gray-600">
                   <BookOpen className="w-3.5 h-3.5 text-black" />
-                  Florida DBPR Approved Catalog
+                  {isSpanish ? "Catálogo Aprobado por el DBPR de Florida" : "Florida DBPR Approved Catalog"}
                 </div>
                 <h1 className="text-3xl sm:text-5xl font-bold text-black tracking-tight font-display">
-                  Explore Real Estate <span className="italic font-extrabold text-neutral-800">Courses</span>
+                  {isSpanish ? "Explora Cursos de " : "Explore Real Estate "}<span className="italic font-extrabold text-neutral-800">{isSpanish ? "Bienes Raíces" : "Courses"}</span>
                 </h1>
                 <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
-                  Browse our selection of Florida state-approved licensing courses, continuing education programs, and specialized real estate AI business playbooks.
+                  {isSpanish
+                    ? "Explora nuestra selección de cursos aprobados por el estado de Florida para licencias, educación continua y programas especializados en IA para bienes raíces."
+                    : "Browse our selection of Florida state-approved licensing courses, continuing education programs, and specialized real estate AI business playbooks."}
                 </p>
               </div>
             </div>
@@ -759,7 +808,7 @@ export default function ExploreCoursesView({
                   <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="Search courses..."
+                    placeholder={isSpanish ? "Buscar cursos..." : "Search courses..."}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-xs text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all"
@@ -787,11 +836,11 @@ export default function ExploreCoursesView({
                       {course.dbprApproved ? (
                         <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
                           <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                          DBPR Approved
+                          {isSpanish ? "Aprobado DBPR" : "DBPR Approved"}
                         </span>
                       ) : (
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
-                          {course.badge && course.badge.toLowerCase() !== course.category.toLowerCase() ? course.badge : "Pro Certificate"}
+                          {course.badge && course.badge.toLowerCase() !== course.category.toLowerCase() ? course.badge : (isSpanish ? "Certificado Profesional" : "Pro Certificate")}
                         </span>
                       )}
                     </div>
@@ -831,7 +880,7 @@ export default function ExploreCoursesView({
                         }}
                         className="flex-1 bg-gray-50 hover:bg-black hover:text-white border border-gray-200 text-black font-semibold text-xs py-2.5 px-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <span>View Program Details</span>
+                        <span>{isSpanish ? "Ver Detalles del Programa" : "View Program Details"}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
 
@@ -844,7 +893,7 @@ export default function ExploreCoursesView({
                           className="bg-black hover:bg-neutral-900 text-white font-bold text-xs py-2.5 px-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-1 shrink-0 cursor-pointer shadow-xs"
                           title="Direct HighLevel Enrollment"
                         >
-                          <span>Buy</span>
+                          <span>{isSpanish ? "Comprar" : "Buy"}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
@@ -857,15 +906,17 @@ export default function ExploreCoursesView({
 
             {filteredCourses.length === 0 && (
               <div className="bg-white border border-gray-150 rounded-2xl p-12 text-center space-y-3">
-                <p className="text-sm font-semibold text-gray-600">No courses match your search criteria.</p>
+                <p className="text-sm font-semibold text-gray-600">
+                  {isSpanish ? "No se encontraron cursos que coincidan con tu búsqueda." : "No courses match your search criteria."}
+                </p>
                 <button
                   onClick={() => {
-                    setSelectedCategory("All");
+                    setSelectedCategory(isSpanish ? "Todos" : "All");
                     setSearchQuery("");
                   }}
                   className="text-xs text-black underline font-mono font-bold uppercase tracking-wider"
                 >
-                  Reset Filters
+                  {isSpanish ? "Restablecer Filtros" : "Reset Filters"}
                 </button>
               </div>
             )}

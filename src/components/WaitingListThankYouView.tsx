@@ -12,6 +12,7 @@ import {
   Zap, 
   Clock 
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface WaitingListThankYouViewProps {
   onBackToHome: () => void;
@@ -19,6 +20,8 @@ interface WaitingListThankYouViewProps {
 }
 
 export default function WaitingListThankYouView({ onBackToHome, onExploreCourses }: WaitingListThankYouViewProps) {
+  const { isSpanish } = useLanguage();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -44,13 +47,15 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200/80 rounded-full text-[11px] font-mono font-bold text-emerald-800 uppercase tracking-wider">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Priority Waitlist Registration Confirmed
+                {isSpanish ? "Registro en Lista de Espera Confirmado" : "Priority Waitlist Registration Confirmed"}
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-black font-display tracking-tight leading-tight">
-                You're On The VIP Waiting List!
+                {isSpanish ? "¡Estás en la Lista de Espera VIP!" : "You're On The VIP Waiting List!"}
               </h1>
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                Thank you for registering your interest with Upgraded Real Estate Academy. Your spot on our priority notification list has been reserved.
+                {isSpanish 
+                  ? "Gracias por registrar tu interés en Upgraded Real Estate Academy. Tu lugar en nuestra lista de notificación prioritaria ha sido reservado."
+                  : "Thank you for registering your interest with Upgraded Real Estate Academy. Your spot on our priority notification list has been reserved."}
               </p>
             </div>
           </div>
@@ -60,13 +65,15 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
             <div className="space-y-2">
               <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
-                Early Access Guarantee
+                {isSpanish ? "Garantía de Acceso Anticipado" : "Early Access Guarantee"}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-sans tracking-tight">
-                What Happens Next?
+                {isSpanish ? "¿Qué Sucede Ahora?" : "What Happens Next?"}
               </h2>
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-sans font-normal">
-                As a waitlist member, you get exclusive priority benefits before our courses open to the general public.
+                {isSpanish 
+                  ? "Como miembro de la lista de espera, obtienes beneficios exclusivos de prioridad antes de que nuestros cursos se abran al público general."
+                  : "As a waitlist member, you get exclusive priority benefits before our courses open to the general public."}
               </p>
             </div>
           </div>
@@ -79,9 +86,13 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
                 <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
                   <Mail className="w-5 h-5 text-emerald-700" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">1. First to Know</h3>
+                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "1. Sé el Primero en Saber" : "1. First to Know"}
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed font-sans font-normal">
-                  You'll receive an email notification with direct early enrollment access as soon as course registration goes live.
+                  {isSpanish 
+                    ? "Recibirás una notificación por correo electrónico con acceso directo de inscripción anticipada en cuanto se abra el registro del curso."
+                    : "You'll receive an email notification with direct early enrollment access as soon as course registration goes live."}
                 </p>
               </div>
 
@@ -89,9 +100,13 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
                 <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
                   <Gift className="w-5 h-5 text-blue-700" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">2. Early-Bird Pricing</h3>
+                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "2. Tarifa de Lanzamiento" : "2. Early-Bird Pricing"}
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed font-sans font-normal">
-                  VIP waitlist members receive exclusive initial launch discounts and promotional bonus resources.
+                  {isSpanish 
+                    ? "Los miembros VIP de la lista de espera reciben descuentos iniciales exclusivos y recursos promocionales adicionales."
+                    : "VIP waitlist members receive exclusive initial launch discounts and promotional bonus resources."}
                 </p>
               </div>
 
@@ -99,9 +114,13 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
                 <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center shrink-0">
                   <Zap className="w-5 h-5 text-purple-700" />
                 </div>
-                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">3. Sneak Peeks</h3>
+                <h3 className="text-base font-bold text-gray-900 font-sans tracking-tight">
+                  {isSpanish ? "3. Adelantos Exclusivos" : "3. Sneak Peeks"}
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed font-sans font-normal">
-                  Watch your inbox for curriculum previews, study guides, and actionable industry updates before launch.
+                  {isSpanish 
+                    ? "Mantente atento a tu correo para recibir vistas previas del plan de estudios, guías de estudio y actualizaciones del sector."
+                    : "Watch your inbox for curriculum previews, study guides, and actionable industry updates before launch."}
                 </p>
               </div>
 
@@ -113,8 +132,12 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
             <div className="flex items-center gap-3.5 text-left">
               <Mail className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
-                <p className="text-black font-bold text-sm sm:text-base font-sans">Have questions about upcoming courses?</p>
-                <p className="text-gray-500 text-xs sm:text-sm font-sans">Our student support team is here to assist you anytime.</p>
+                <p className="text-black font-bold text-sm sm:text-base font-sans">
+                  {isSpanish ? "¿Tienes preguntas sobre próximos cursos?" : "Have questions about upcoming courses?"}
+                </p>
+                <p className="text-gray-500 text-xs sm:text-sm font-sans">
+                  {isSpanish ? "Nuestro equipo de soporte al estudiante está a tu disposición en cualquier momento." : "Our student support team is here to assist you anytime."}
+                </p>
               </div>
             </div>
             <a
@@ -132,14 +155,14 @@ export default function WaitingListThankYouView({ onBackToHome, onExploreCourses
               className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-black font-bold rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
               <Home className="w-4 h-4" />
-              Return to Home
+              {isSpanish ? "Volver al Inicio" : "Return to Home"}
             </button>
             <button
               onClick={onExploreCourses}
               className="inline-flex items-center gap-2 px-6 py-3 bg-black hover:bg-neutral-900 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer"
             >
               <BookOpen className="w-4 h-4" />
-              Explore Active Courses
+              {isSpanish ? "Explorar Cursos Activos" : "Explore Active Courses"}
             </button>
           </div>
 

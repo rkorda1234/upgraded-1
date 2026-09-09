@@ -12,6 +12,7 @@ import {
   Building,
   Mail
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export type PolicyKey = "terms" | "privacy" | "student" | "refund" | "accessibility" | "cookie";
 
@@ -22,6 +23,7 @@ interface PolicyViewProps {
 
 export default function PolicyView({ initialPolicy, onBack }: PolicyViewProps) {
   const [activePolicy, setActivePolicy] = React.useState<PolicyKey>(initialPolicy);
+  const { isSpanish } = useLanguage();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -30,39 +32,39 @@ export default function PolicyView({ initialPolicy, onBack }: PolicyViewProps) {
   const policies = [
     {
       id: "terms" as PolicyKey,
-      label: "Terms & Conditions",
+      label: isSpanish ? "Términos y Condiciones" : "Terms & Conditions",
       icon: FileText,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
     {
       id: "privacy" as PolicyKey,
-      label: "Privacy Policy",
+      label: isSpanish ? "Política de Privacidad" : "Privacy Policy",
       icon: Shield,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
     {
       id: "student" as PolicyKey,
-      label: "Student Policies",
+      label: isSpanish ? "Políticas del Estudiante" : "Student Policies",
       icon: UserCheck,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
     {
       id: "refund" as PolicyKey,
-      label: "Course Purchase & Refund Policy",
+      label: isSpanish ? "Política de Compra y Reembolso" : "Course Purchase & Refund Policy",
       icon: Receipt,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
     {
       id: "accessibility" as PolicyKey,
-      label: "Accessibility Statement",
+      label: isSpanish ? "Declaración de Accesibilidad" : "Accessibility Statement",
       icon: Accessibility,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
     {
       id: "cookie" as PolicyKey,
-      label: "Cookie Policy",
+      label: isSpanish ? "Política de Cookies" : "Cookie Policy",
       icon: Cookie,
-      updated: "July 2026",
+      updated: isSpanish ? "Julio 2026" : "July 2026",
     },
   ];
 
@@ -77,17 +79,27 @@ export default function PolicyView({ initialPolicy, onBack }: PolicyViewProps) {
             className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-gray-500 hover:text-black transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            {isSpanish ? "Volver al Inicio" : "Back to Home"}
           </button>
         </div>
 
         {/* Header Title */}
         <div className="text-left border-b border-gray-150 pb-10 mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-black font-display">
-            Legal & <span className="italic font-extrabold text-neutral-800">Policies</span>
+            {isSpanish ? (
+              <>
+                Marco Legal y <span className="italic font-extrabold text-neutral-800">Políticas</span>
+              </>
+            ) : (
+              <>
+                Legal & <span className="italic font-extrabold text-neutral-800">Policies</span>
+              </>
+            )}
           </h1>
           <p className="text-gray-500 text-sm mt-3 max-w-2xl">
-            Please review our institutional guidelines, licensing compliance mandates, privacy practices, and student terms.
+            {isSpanish 
+              ? "Revisa nuestras directrices institucionales, mandatos de cumplimiento de licencias, prácticas de privacidad y términos para estudiantes."
+              : "Please review our institutional guidelines, licensing compliance mandates, privacy practices, and student terms."}
           </p>
         </div>
 
@@ -96,7 +108,7 @@ export default function PolicyView({ initialPolicy, onBack }: PolicyViewProps) {
           {/* Navigation Sidebar */}
           <div className="lg:col-span-4 bg-white border border-gray-150 rounded-2xl p-4 space-y-1 shadow-[0_4px_20px_rgba(0,0,0,0.01)] text-left">
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-400 px-3 py-1 block mb-2">
-              Documents
+              {isSpanish ? "Documentos" : "Documents"}
             </span>
             <div className="space-y-1">
               {policies.map((p) => {
@@ -127,7 +139,7 @@ export default function PolicyView({ initialPolicy, onBack }: PolicyViewProps) {
             <div className="flex flex-wrap items-center gap-4 text-[10px] font-mono text-gray-400 font-bold uppercase border-b border-gray-100 pb-6 mb-6">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Effective: July 2026</span>
+                <span>{isSpanish ? "Vigencia: Julio 2026" : "Effective: July 2026"}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Building className="w-3.5 h-3.5" />

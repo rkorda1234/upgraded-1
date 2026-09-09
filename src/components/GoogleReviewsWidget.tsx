@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function GoogleReviewsWidget() {
+  const { isSpanish } = useLanguage();
+
   // Load the external GoHighLevel / ReputationHub script to handle iframe resizing/behavior
   useEffect(() => {
     const existingScript = document.querySelector(
@@ -23,13 +26,15 @@ export default function GoogleReviewsWidget() {
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            Live Client Reviews
+            {isSpanish ? "Opiniones Reales de Estudiantes" : "Live Client Reviews"}
           </div>
           <h2 className="text-3xl sm:text-4xl font-semibold text-black tracking-tight font-display">
-            Verified Student Success
+            {isSpanish ? "Casos de Éxito de Estudiantes Verificados" : "Verified Student Success"}
           </h2>
-          <p className="text-gray-500 text-sm leading-relaxed font-sans">
-            Real stories from real estate professionals who transformed their practice, updated their compliance, and mastered modern digital toolkits with our programs.
+          <p className={`text-gray-500 text-sm leading-relaxed font-sans ${isSpanish ? "text-balance max-w-xl mx-auto" : ""}`}>
+            {isSpanish 
+              ? "Historias reales de profesionales que transformaron su práctica inmobiliaria, renovaron su licencia y dominaron herramientas digitales con nuestros programas."
+              : "Real stories from real estate professionals who transformed their practice, updated their compliance, and mastered modern digital toolkits with our programs."}
           </p>
         </div>
 
