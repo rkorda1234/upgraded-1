@@ -12,7 +12,7 @@ preview, then merge to `main`.
 
 ## Commands
 
-- `npm install` — install dependencies (no lockfile is committed)
+- `npm install` — install dependencies
 - `npm run dev` — local dev server on port 3000 (Express + Vite, `server.ts`)
 - `npm run build` — production build into `dist/`
 - `npm run lint` — type-check (`tsc --noEmit`); run before pushing
