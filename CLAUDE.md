@@ -10,6 +10,27 @@ Vercel watches this repo. A push to `main` deploys to the live site; a push to
 any other branch gets its own preview URL. Make changes on a branch, check the
 preview, then merge to `main`.
 
+## Workflow for the people editing this site
+
+The people asking for changes are not developers and don't use git or GitHub
+themselves. Handle every step for them:
+
+1. Make the requested change on a branch, run `npm run lint`, and push.
+2. Open a pull request into `main` and wait for Vercel to post its preview
+   link on it. Give the user that preview link in plain language and tell
+   them nothing is live yet.
+3. When the user says to publish, go live, merge or similar, merge the pull
+   request into `main` yourself. The user asking is the approval. Before
+   merging, check that the Vercel build passed and that the pull request has
+   no merge conflicts. If either fails, fix it first or explain the problem
+   in plain language.
+4. After merging, tell the user the change will be live on the site in a
+   minute or two.
+
+Never merge without the user asking in that session. If a merge conflict
+appears because someone else changed the same part of the site, merge `main`
+into the branch, resolve the conflict, and push again before merging.
+
 ## Commands
 
 - `npm install` — install dependencies
