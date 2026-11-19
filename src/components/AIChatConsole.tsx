@@ -187,6 +187,10 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
         
         // Trigger speech if unmuted
         speakResponse(data.content);
+      } else if (res.status === 429) {
+        throw new Error(isSpanish
+          ? "Demasiados mensajes. Por favor, espera un minuto e intenta de nuevo."
+          : "Too many messages. Please wait a minute and try again.");
       } else {
         throw new Error(data.error || (isSpanish ? "Error al generar la respuesta." : "Failed to generate response."));
       }
@@ -392,6 +396,7 @@ export default function AIChatConsole({ onClose, initialPrompt }: { onClose?: ()
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            maxLength={2000}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSendMessage();
